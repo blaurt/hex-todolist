@@ -3,9 +3,9 @@ import { TodoItem } from './todo-item.entity';
 
 export class TodoList {
   public constructor(
-      private readonly items: TodoItem[],
-      private readonly isDone = false,
-      private readonly isPrivate = true
+      private items: TodoItem[],
+      private isDone = false,
+      private isPrivate = true
     ) {}
 
     public markAsDone(): void {
