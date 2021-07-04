@@ -12,14 +12,41 @@ export interface UserBuilderParams {
 
 export class User extends BaseEntity {
    
-        private login: string;
-        private email: string;
-        private passwordHash: string;
+        private _login: string;
+        private _email: string;
+        protected _passwordHash: string;
 
         public constructor() {
         super();
         
     }
+
+    get login(){
+        return this._login;
+    }
+//todo
+    set login(value: string){
+        this._login = value;
+    }
+
+    get email(){
+        return this._email;
+    }
+
+    //todo
+    set email(value: string){
+        this._login = value;
+    }
+
+    get passwordHash(){
+        return this._passwordHash;
+    }
+//todo
+    set passwordHash(value: string){
+        this._passwordHash = value;
+    }
+
+
 
     public async validatePassword(input: string, passwordHash: string): Promise<boolean>{
         //todo implement
