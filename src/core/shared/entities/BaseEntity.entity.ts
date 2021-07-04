@@ -2,7 +2,7 @@ import { v4 } from 'uuid';
 
 
 export abstract class BaseEntity{
-    protected _entityId: string;
+    protected readonly _entityId: string;
 
     public constructor(){
         this._entityId = v4();

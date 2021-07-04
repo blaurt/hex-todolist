@@ -1,14 +1,14 @@
 # Advanced TodoList
 
-
 ## Description
 
 - built with typescript
 - designed according to hexagonal architecture principles
 - REST-api is going to be implemented with [Nest](https://github.com/nestjs/nest) framework
 
-
 ## To be done:
+- use command-query. A command can be used to validate input
+- add DI container
 - extract mapper-feature to separate component
 - CQRS pattern
 - caching
@@ -52,9 +52,6 @@ $ npm run test:e2e
 # test coverage
 $ npm run test:cov
 ```
-
- 
- 
 
 ## License
 

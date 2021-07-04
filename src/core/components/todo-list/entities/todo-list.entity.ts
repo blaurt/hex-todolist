@@ -1,4 +1,4 @@
-import { AppException } from 'src/AppException.exception';
+import { AppBaseException } from 'src/core/shared/exceptions/app-base.exception';
 import { BaseEntity } from 'src/core/shared/entities/BaseEntity.entity';
 import { TodoItem } from './todo-item.entity';
 
@@ -16,7 +16,7 @@ export class TodoList extends BaseEntity {
 
     public markAsDone(): void {
         if(this.items.some(item=>!item.isDone)){
-            throw new AppException('List contains unfinished items');
+            throw new AppBaseException('List contains unfinished items');
         }
 
         this.isDone = true;
