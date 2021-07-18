@@ -1,0 +1,107 @@
+// To support ordered imports feature we need the following plugin:
+// https://github.com/benmosher/eslint-plugin-import
+{
+  "env": {
+    // "browser": true,
+    "es2021": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:import/errors",
+    "plugin:import/warnings"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 12,
+    "sourceType": "module"
+  },
+  "plugins": ["@typescript-eslint", "class-property", "simple-import-sort"],
+  "rules": {
+    "simple-import-sort/imports": "error",
+    "simple-import-sort/exports": "error",
+    "sort-imports": "off",
+    "import/order": "off",
+    "no-unused-expressions": "warn",
+    "no-shadow": "off",
+    "@typescript-eslint/no-shadow": ["warn"],
+    "curly": ["error", "multi"],
+    "eol-last": "warn",
+    "space-before-blocks": "warn",
+    "eqeqeq": "error",
+    "newline-before-return": "warn",
+    "indent": ["warn", 4],
+    "linebreak-style": ["error", "unix"],
+    "max-len": ["error", { "code": 300, "tabWidth": 4 }],
+    // "@typescript-eslint/member-ordering": ["warn"],
+    "no-console": [
+      "warn",
+      { "allow": ["debug", "log", "error", "time", "timeEnd", "trace"] }
+    ],
+    "no-empty": ["warn"],
+    "no-eval": "error",
+    "no-throw-literal": "error",
+    "dot-notation": "warn",
+    "no-trailing-spaces": "warn",
+    "no-undef-init": "warn",
+    "no-label-var": "error",
+    "brace-style": "warn",
+    "quotes": ["warn", "double"],
+    "radix": "error",
+    "semi": ["error", "always"],
+    "valid-typeof": ["warn"],
+    "@typescript-eslint/unified-signatures": "warn",
+    "comma-dangle": [
+      "warn",
+      {
+        "arrays": "always-multiline",
+        "objects": "always-multiline",
+        "imports": "never",
+        "exports": "never",
+        "functions": "always-multiline"
+      }
+    ],
+    "spaced-comment": ["error", "always"],
+    // "sort-imports": ["warn"], do not enable
+    // "simple-import-sort/sort": "error", do not enable
+    "@typescript-eslint/no-duplicate-imports": "error",
+    "import/first": ["warn"],
+    // "import/order": ["warn"], do not enable
+    "import/no-unresolved": "off",
+    "import/no-duplicates": "off",
+    "import/newline-after-import": ["warn", { "count": 1 }],
+
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/no-empty-function": "warn",
+    "@typescript-eslint/array-type": ["warn", { "default": "array-simple" }],
+    "object-shorthand": "warn",
+    "nonblock-statement-body-position": ["error", "below"],
+    "class-property/class-property-semicolon": ["warn", "always"],
+    "lines-between-class-members": [
+      "warn",
+      "always",
+      {
+        "exceptAfterSingleLine": true
+      }
+    ],
+    "no-useless-constructor": "off",
+    "no-multiple-empty-lines": ["warn", { "max": 1, "maxEOF": 0 }],
+    "array-element-newline": ["warn", { "minItems": 3 }],
+    "array-bracket-newline": ["warn", { "multiline": true }],
+    "@typescript-eslint/member-delimiter-style": [
+      "warn",
+      {
+        "multiline": {
+          "delimiter": "comma",
+          "requireLast": true
+        },
+        "singleline": {
+          "delimiter": "comma",
+          "requireLast": false
+        }
+      }
+    ],
+    "multiline-ternary": ["warn", "always"],
+    "operator-linebreak": ["warn", "before"]
+  }
+}
