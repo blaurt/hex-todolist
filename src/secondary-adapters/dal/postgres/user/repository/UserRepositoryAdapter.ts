@@ -1,43 +1,49 @@
-import {inject, injectable} from 'inversify';
-import { User } from 'src/core/components/user/entities/user.entity';
-import { UserRepository } from 'src/core/components/user/ports/user.repository';
-import {BaseTypeORMRepository} from '../../shared/BaseTypeORMRepository';
-import {UserEntity} from '../data/UserEntity';
+import { InjectRepository } from "@nestjs/typeorm";
+import { inject, injectable } from "inversify";
+import { User } from "src/core/components/user/entities/user.entity";
+import { UserRepository } from "src/core/components/user/ports/user.repository";
+import { Repository } from "typeorm";
+
+import { BaseTypeORMRepository } from "../../shared/BaseTypeORMRepository";
+import { UserEntity } from "../data/user.entity";
 
 @injectable()
-export class UserRepositoryPgAdapter extends BaseTypeORMRepository<UserEntity> implements UserRepository {
-
-    constructor(
-    ) {
-        super(UserEntity);
-    }
+export class UserRepositoryPgAdapter implements UserRepository {
+    constructor(@InjectRepository(UserEntity) private readonly baseRepo: Repository<UserEntity>) {}
     getBannedUsers(): Promise<User[]> {
-        throw new Error('Method not implemented.');
+        throw new Error("Method not implemented.");
     }
-    update(entity: User, payload: Omit<Partial<User>, 'entityId'>): Promise<User> {
-        throw new Error('Method not implemented.');
+
+    update(entity: User, payload: Omit<Partial<User>, "entityId">): Promise<User> {
+        throw new Error("Method not implemented.");
     }
-    
+
     getList(): Promise<User[]> {
-        throw new Error('Method not implemented.');
+        throw new Error("Method not implemented.");
     }
-    delete(entityId: string): Promise<void> {
-        throw new Error('Method not implemented.');
+
+    async delete(entityId: string): Promise<void> {
+        await this.baseRepo.delete({ entity_id: entityId });
+
+        return;
     }
 
     public async save(entity: User): Promise<User> {
-        const savedEntity = await this.repository.save(entity);
-        return savedEntity;
+        const mappedData = UserEntity.fromDomainObject(entity);
+        const savedEntity = await this.baseRepo.save(mappedData);
+
+        return UserEntity.toDomainObject(savedEntity);
     }
 
     public async getById(id: string): Promise<User | null> {
-        const maybeEntity = await this.repository.findOne({where: {id}});
+        const maybeEntity = await this.baseRepo.findOne({ where: { id } });
+
         return maybeEntity as unknown as User;
     }
 
     public async findByUsername(username: string): Promise<User | null> {
-        const maybeEntity = await this.repository.findOne({where: {username}});
+        const maybeEntity = await this.baseRepo.findOne({ where: { login: username } });
+
         return maybeEntity as unknown as User;
     }
-
 }

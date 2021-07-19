@@ -1,11 +1,11 @@
-import {EntityManager, getManager, Repository} from 'typeorm';
-import {injectable, unmanaged} from 'inversify';
+import { injectable, unmanaged } from "inversify";
+import { EntityManager, getManager, Repository } from "typeorm";
 
 @injectable()
 export class BaseTypeORMRepository<T> {
-    protected entity: new() => T;
+    protected entity: new () => T;
 
-    constructor(@unmanaged() entity: new() => T) {
+    constructor(@unmanaged() entity: new () => T) {
         this.entity = entity;
     }
 
@@ -16,5 +16,4 @@ export class BaseTypeORMRepository<T> {
     protected get repository(): Repository<T> {
         return this.entityManager.getRepository<T>(this.entity);
     }
-
 }

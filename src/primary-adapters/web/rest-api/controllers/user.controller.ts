@@ -1,25 +1,24 @@
 import { Body, Controller, Injectable, Post } from "@nestjs/common";
 import { User } from "src/core/components/user/entities/user.entity";
- import { SignInUser } from "src/use-cases/user/signin.use-case";
- import { SignUpUser} from "src/use-cases/user/signup.use-case";
+import { SignInUser } from "src/use-cases/user/signin.use-case";
+import { SignUpUser } from "src/use-cases/user/signup.use-case";
 
 @Injectable()
-@Controller('users')
+@Controller("users")
 export class UserController {
-    public constructor(){
+    public constructor(private readonly signUpUseCase: SignUpUser) {}
 
-    }
-
-    @Post('/signup')
+    @Post("/signup")
     public async signup(@Body() input): Promise<User> {
-        const service = new SignUpUser();
-        return service.execute(input);
+        console.log("🚀 ~ file: user.controller.ts ~ line 13 ~ UserController ~ signup ~ input", input);
+
+        return this.signUpUseCase.execute(input);
     }
 
-    @Post('/signin')
+    @Post("/signin")
     public async signin(@Body() input): Promise<User> {
         const useCase = new SignInUser();
-        return useCase.execute(input);
 
+        return useCase.execute(input);
     }
 }

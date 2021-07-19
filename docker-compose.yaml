@@ -1,0 +1,48 @@
+version: '3.1'
+services:
+  adminer1:
+    image: adminer
+    restart: always
+    depends_on:
+      - postgres
+    ports:
+      - 8091:8080
+
+  postgres:
+    image: postgres:10-alpine
+    environment:
+        POSTGRES_USER: admin
+        POSTGRES_PASSWORD: pass
+        POSTGRES_DB: todo_main_db
+    ports:
+      - 5433:5432
+    volumes: 
+      - ./docker/volumes/postgres:/var/lib/postgresql
+    
+#   postgres_cvv:
+#     build:
+#       dockerfile: Dockerfile
+#       context: ./docker_local_env/postgres_cvv/
+#     environment:
+#       POSTGRES_PASSWORD: postgres
+#     ports:
+#       - 5434:5432
+
+#   mongo:
+#     build:
+#       args:
+#         gpt: "${GPT}"
+#       dockerfile: Dockerfile
+#       context: ./docker_local_env/mongo/
+#     ports:
+#       - "27018:27017"
+
+#   mongo_cvv:
+#     build:
+#       args:
+#         gpt: "${GPT}"
+#       dockerfile: Dockerfile
+#       context: ./docker_local_env/mongo_cvv/
+#     ports:
+#       - "27019:27017"
+
