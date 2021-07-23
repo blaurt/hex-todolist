@@ -6,9 +6,9 @@ import { BaseEntity } from "../../../shared/entities/BaseEntity.entity";
 const ROUNDS = 10 as const;
 
 export interface UserBuilderParams {
-    login: User["login"],
-    email: User["email"],
-    password: string,
+    login: User["login"];
+    email: User["email"];
+    password: string;
 }
 
 export class User extends BaseEntity {
