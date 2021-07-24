@@ -6,9 +6,10 @@
 - designed according to hexagonal architecture principles
 - REST-api is going to be implemented with [Nest](https://github.com/nestjs/nest) framework
 
-## To be done:
+## Roadmap / To be done:
+- auto snake-case transform
 - use command-query. A command can be used to validate input
-- add DI container
+- add DI container wrapper
 - extract mapper-feature to separate component
 - CQRS pattern
 - caching
