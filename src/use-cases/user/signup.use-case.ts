@@ -1,36 +1,47 @@
+import Joi from "joi";
 import { pick } from "lodash";
 import { User } from "src/core/components/user/entities/user.entity";
 import { UserRepository } from "src/core/components/user/ports/user.repository";
 import { CreateUserService } from "src/core/components/user/services/create-user.service";
 
-import { BaseUseCase, UseCaseProps } from "../base.use-case";
+import { BaseUseCase } from "../base.use-case";
 
-const PublicFields: Readonly<Array<keyof User>> = [
-    "email",
-    "entityId",
-    "login",
-] as const;
+interface Input {
+    login: string;
+    password: string;
+    repeatPassword: string;
+    email: string;
+}
 
-export class SignUpUserUseCase extends BaseUseCase<User> {
+export class SignUpUseCase extends BaseUseCase<Input, void> {
     private readonly userService: CreateUserService;
 
-    public constructor(private readonly repository: UserRepository, props?: UseCaseProps) {
-        super(props);
+    public constructor(private readonly repository: UserRepository) {
+        super();
         this.userService = new CreateUserService(this.repository);
     }
 
-    protected validate(): Promise<void> {
-        // todo
-        return;
+    protected async validate({ login, password }: Pick<User, "login"> & { password: string }): Promise<void> {
+        const schema = Joi.object({
+            login: Joi.string(),
+            password: Joi.string(),
+            repeatPassword: Joi.string(),
+            email: Joi.string().email(),
+        });
+
+        try {
+            const value = await schema.validateAsync({ login, password });
+        } catch (error) {
+            console.log("🚀 ~ file: signin.use-case.ts ~ line 36 ~ SignInUser ~ error", error);
+        }
     }
 
-    public async execute({ login, password, email }): Promise<typeof PublicFields> {
+    protected async handleRequest({ login, password, email }) {
         const user = await this.userService.createUser({ email, login, password });
-
-        return this.trimResultData(user);
+        // todo send email notif
     }
 
-    protected trimResultData(data: User): Partial<typeof PublicFields> {
-        return pick(data, PublicFields);
+    protected trimResultData(data: User) {
+        return;
     }
 }

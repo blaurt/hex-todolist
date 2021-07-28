@@ -6,18 +6,31 @@ const DEFAULT_USE_CASE_CONFIG = {
 
 export type UseCaseProps = Partial<typeof DEFAULT_USE_CASE_CONFIG>;
 
-export abstract class BaseUseCase<TResult> {
+export abstract class BaseUseCase<TInput = unknown, TResult = void> {
     private readonly shouldValidate: boolean;
-    private readonly shouldTrimSensitiveData: boolean;
-    private readonly customDataTrimmer: (x: unknown) => unknown;
+    private readonly shouldTrimResult: boolean;
+    // private readonly customDataTrimmer: (x: unknown) => unknown;
 
     public constructor(props: UseCaseProps = DEFAULT_USE_CASE_CONFIG) {
         this.shouldValidate = props.shouldValidate ?? DEFAULT_USE_CASE_CONFIG.shouldValidate;
-        this.shouldTrimSensitiveData = props.shouldTrimSensitiveData ?? DEFAULT_USE_CASE_CONFIG.shouldTrimSensitiveData;
-        this.customDataTrimmer = props.customDataTrimmer ?? DEFAULT_USE_CASE_CONFIG.customDataTrimmer;
+        this.shouldTrimResult = props.shouldTrimSensitiveData ?? DEFAULT_USE_CASE_CONFIG.shouldTrimSensitiveData;
+        // this.customDataTrimmer = props.customDataTrimmer ?? DEFAULT_USE_CASE_CONFIG.customDataTrimmer;
     }
 
-    protected abstract trimResultData(data: unknown): unknown;
-    protected abstract validate(payload: unknown): Promise<void>;
-    public abstract execute(payload: unknown): Promise<Partial<TResult>>;
+    protected abstract trimResultData(data: unknown): TResult;
+    protected abstract handleRequest(payload: unknown);
+
+    protected abstract validate(data: TInput): Promise<void>;
+
+    public async execute(payload: TInput): Promise<TResult> {
+        if (this.shouldValidate)
+            await this.validate(payload);
+
+        const data = await this.handleRequest(payload);
+
+        if (this.shouldTrimResult)
+            return this.trimResultData(data);
+
+        return data;
+    }
 }
