@@ -1,4 +1,4 @@
-import { hash } from "bcrypt";
+import { compare,hash } from "bcrypt";
 
 import { BaseEntity } from "../../../shared/entities/BaseEntity.entity";
 
@@ -21,8 +21,7 @@ export class User extends BaseEntity {
     }
 
     public async validatePassword(input: string, passwordHash: string): Promise<boolean> {
-        // todo implement
-        return true;
+        return compare(input, passwordHash);
     }
 
     public static async fromInput({ email, login, password }: UserBuilderParams): Promise<User> {

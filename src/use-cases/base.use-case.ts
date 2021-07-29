@@ -17,20 +17,21 @@ export abstract class BaseUseCase<TInput = unknown, TResult = void> {
         // this.customDataTrimmer = props.customDataTrimmer ?? DEFAULT_USE_CASE_CONFIG.customDataTrimmer;
     }
 
+    public async execute(payload: TInput): Promise<TResult> {
+        if (this.shouldValidate) {
+            await this.validate(payload);
+        }
+
+        const data = await this.handleRequest(payload);
+        if (this.shouldTrimResult) {
+            return this.trimResultData(data);
+        }
+
+        return data;
+    }
+
     protected abstract trimResultData(data: unknown): TResult;
     protected abstract handleRequest(payload: unknown);
 
     protected abstract validate(data: TInput): Promise<void>;
-
-    public async execute(payload: TInput): Promise<TResult> {
-        if (this.shouldValidate)
-            await this.validate(payload);
-
-        const data = await this.handleRequest(payload);
-
-        if (this.shouldTrimResult)
-            return this.trimResultData(data);
-
-        return data;
-    }
 }

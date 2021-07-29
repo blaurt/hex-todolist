@@ -20,7 +20,7 @@
         "no-unused-expressions": "warn",
         "no-shadow": "off",
         "@typescript-eslint/no-shadow": ["warn"],
-        "curly": ["error", "multi"],
+        "curly": ["error", "all"],
         "eol-last": "warn",
         "space-before-blocks": "warn",
         "eqeqeq": "error",
@@ -28,7 +28,7 @@
         "indent": ["warn", 4],
         "linebreak-style": ["error", "unix"],
         "max-len": ["error", { "code": 150, "tabWidth": 4 }],
-        // "@typescript-eslint/member-ordering": ["warn"],
+        "@typescript-eslint/member-ordering": ["warn"],
         "no-console": ["warn", { "allow": ["debug", "log", "error", "time", "timeEnd", "trace"] }],
         "no-empty": ["warn"],
         "no-eval": "error",
@@ -94,6 +94,7 @@
             }
         ],
         "multiline-ternary": ["warn", "always"],
-        "operator-linebreak": ["warn", "before"]
+        "operator-linebreak": ["warn", "before"],
+        "padding-line-between-statements": ["warn", { "blankLine": "always", "prev": "if", "next": "*" }]
     }
 }

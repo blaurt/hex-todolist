@@ -2,8 +2,8 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from 'src/secondary-adapters/dal/postgres/user/data/user.entity';
 import { UserRepositoryPgAdapter } from 'src/secondary-adapters/dal/postgres/user/repository/UserRepositoryAdapter';
-import { SignInUseCase } from 'src/use-cases/user/signin.use-case';
-import { SignUpUseCase } from 'src/use-cases/user/signup.use-case';
+import { SignInUseCase } from 'src/use-cases/auth/sign-in/sign-in.use-case';
+import { SignUpUseCase } from 'src/use-cases/auth/sign-up/sign-up.use-case';
 
 import { UserController } from './controllers/user/user.controller';
 
