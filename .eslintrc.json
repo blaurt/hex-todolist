@@ -13,8 +13,8 @@
     },
     "plugins": ["@typescript-eslint", "class-property", "simple-import-sort"],
     "rules": {
-        "simple-import-sort/imports": "error",
-        "simple-import-sort/exports": "error",
+        "simple-import-sort/imports": "warn",
+        "simple-import-sort/exports": "warn",
         "sort-imports": "off",
         "import/order": "off",
         "no-unused-expressions": "warn",

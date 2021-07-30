@@ -1,15 +1,18 @@
-import { InjectRepository } from "@nestjs/typeorm";
-import { inject, injectable } from "inversify";
+import { injectable } from "inversify";
 import { User } from "src/core/components/user/entities/user.entity";
 import { UserRepository } from "src/core/components/user/ports/user.repository";
-import { Repository } from "typeorm";
+import { getRepository, Repository } from "typeorm";
 
-import { BaseTypeORMRepository } from "../../shared/BaseTypeORMRepository";
 import { UserEntity } from "../data/user.entity";
 
 @injectable()
 export class UserRepositoryPgAdapter implements UserRepository {
-    constructor(@InjectRepository(UserEntity) private readonly baseRepo: Repository<UserEntity>) {}
+    private readonly baseRepo: Repository<UserEntity>;
+
+    public constructor() {
+        this.baseRepo = getRepository(UserEntity);
+    }
+
     getBannedUsers(): Promise<User[]> {
         throw new Error("Method not implemented.");
     }

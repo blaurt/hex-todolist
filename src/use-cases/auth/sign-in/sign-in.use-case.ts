@@ -3,6 +3,7 @@ import { User } from "src/core/components/user/entities/user.entity";
 import { UserRepository } from "src/core/components/user/ports/user.repository";
 import { FindUserService } from "src/core/components/user/services/find-user.service";
 import { AppBaseException } from "src/core/shared/exceptions/app-base.exception";
+import { JwtService } from "src/secondary-adapters/services/jwt/jwt-service.interface";
 
 import { BaseUseCase } from "../../base.use-case";
 import { SignInValidationSchema } from "./sign-in.validation-schema";
@@ -24,7 +25,7 @@ type Result = Pick<User, typeof PublicFields[number]> & { access_token: string }
 export class SignInUseCase extends BaseUseCase<Input, Result> {
     private readonly userService: FindUserService;
 
-    public constructor(private readonly repository: UserRepository) {
+    public constructor(private readonly repository: UserRepository, private readonly jwtService: JwtService) {
         super();
         this.userService = new FindUserService(this.repository);
     }
@@ -44,11 +45,11 @@ export class SignInUseCase extends BaseUseCase<Input, Result> {
             throw new AppBaseException("Invalid password");
         }
 
-        const token = await this.generateToken({ userId: user.entityId });
+        const token = await this.jwtService.sign({ userId: user.entityId });
 
         return {
             ...user,
-            access_token: token
+            access_token: token,
         };
     }
 
@@ -58,7 +59,4 @@ export class SignInUseCase extends BaseUseCase<Input, Result> {
             access_token: data.access_token,
         };
     }
-
-    // todo move to separate component
-    protected generateToken(payload: Record<string, unknown>) {}
 }

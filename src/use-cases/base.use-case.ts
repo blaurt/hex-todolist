@@ -9,12 +9,10 @@ export type UseCaseProps = Partial<typeof DEFAULT_USE_CASE_CONFIG>;
 export abstract class BaseUseCase<TInput = unknown, TResult = void> {
     private readonly shouldValidate: boolean;
     private readonly shouldTrimResult: boolean;
-    // private readonly customDataTrimmer: (x: unknown) => unknown;
 
     public constructor(props: UseCaseProps = DEFAULT_USE_CASE_CONFIG) {
         this.shouldValidate = props.shouldValidate ?? DEFAULT_USE_CASE_CONFIG.shouldValidate;
         this.shouldTrimResult = props.shouldTrimSensitiveData ?? DEFAULT_USE_CASE_CONFIG.shouldTrimSensitiveData;
-        // this.customDataTrimmer = props.customDataTrimmer ?? DEFAULT_USE_CASE_CONFIG.customDataTrimmer;
     }
 
     public async execute(payload: TInput): Promise<TResult> {
@@ -31,7 +29,6 @@ export abstract class BaseUseCase<TInput = unknown, TResult = void> {
     }
 
     protected abstract trimResultData(data: unknown): TResult;
-    protected abstract handleRequest(payload: unknown);
-
+    protected abstract handleRequest(payload: unknown): any;
     protected abstract validate(data: TInput): Promise<void>;
 }

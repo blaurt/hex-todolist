@@ -24,7 +24,7 @@ export class SignUpUseCase extends BaseUseCase<Input, void> {
         await SignUpValidationSchema.validateAsync({ login, password });
     }
 
-    protected trimResultData(data: User) {
+    protected trimResultData() {
         return;
     }
 
