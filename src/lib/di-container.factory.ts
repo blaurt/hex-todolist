@@ -2,7 +2,7 @@ import * as glob from "glob";
 import { Container, ContainerModule } from "inversify";
 import * as path from "path";
 
-import { appConfig } from "./app.config";
+import { appConfig } from "../configuration/app.config";
 
 export class DIContainerFactory {
     private static instance: Container;

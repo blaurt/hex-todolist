@@ -1,37 +1,38 @@
 import { Module } from "@nestjs/common";
-import { TypeOrmModule } from "@nestjs/typeorm";
-import { DIContainerFactory } from "src/configuration/DIContainerFactory";
-import { UserRepository, UserRepositoryInjectionToken } from "src/core/components/user/ports/user.repository";
-import { UserEntity } from "src/secondary-adapters/dal/postgres/user/data/user.entity";
-import { UserRepositoryPgAdapter } from "src/secondary-adapters/dal/postgres/user/repository/UserRepositoryAdapter";
-import { JwtService, JwtServiceInjectionToken } from "src/secondary-adapters/services/jwt/jwt-service.interface";
-import { SignInUseCase } from "src/use-cases/auth/sign-in/sign-in.use-case";
-import { SignUpUseCase } from "src/use-cases/auth/sign-up/sign-up.use-case";
 
-import { UserController } from "./controllers/user/user.controller";
+import { DIContainerFactory } from "../../../../lib/di-container.factory";
+import { SignInUseCase } from "../../../../use-cases/auth/sign-in/sign-in.use-case";
+import { SignUpUseCase } from "../../../../use-cases/auth/sign-up/sign-up.use-case";
+import { AuthController } from "./controllers/auth/auth.controller";
+import { HealthCheckController } from "./controllers/healthcheck/healthcheck.controller";
+import { JsonResponseFormatter } from "./response-formatters/json-response-formatter";
+import { ResponseFormatterInjectionToken } from "./response-formatters/response-formatter.interface";
 
 @Module({
-    controllers: [UserController],
-    imports: [TypeOrmModule.forFeature([UserEntity])],
+    controllers: [
+        HealthCheckController,
+        AuthController,
+    ],
     providers: [
-        UserRepositoryPgAdapter,
+        {
+            provide: ResponseFormatterInjectionToken,
+            useClass: JsonResponseFormatter,
+        },
         {
             provide: SignUpUseCase,
-            useValue: () => {
+            useFactory: () => {
                 const container = DIContainerFactory.getInstance();
-                const repository = container.get<UserRepository>(UserRepositoryInjectionToken);
+                container.get<SignUpUseCase>(SignUpUseCase);
 
-                return new SignUpUseCase(repository);
+                return container.get<SignUpUseCase>(SignUpUseCase);
             },
         },
         {
             provide: SignInUseCase,
-            useValue: () => {
+            useFactory: () => {
                 const container = DIContainerFactory.getInstance();
-                const repository = container.get<UserRepository>(UserRepositoryInjectionToken);
-                const jwtService = container.get<JwtService>(JwtServiceInjectionToken);
 
-                return new SignInUseCase(repository, jwtService);
+                return container.get<SignInUseCase>(SignInUseCase);
             },
         },
     ],

@@ -1,4 +1,4 @@
-import { compare,hash } from "bcrypt";
+import { compare, hash } from "bcrypt";
 
 import { BaseEntity } from "../../../shared/entities/BaseEntity.entity";
 
@@ -20,10 +20,6 @@ export class User extends BaseEntity {
         super(entityId);
     }
 
-    public async validatePassword(input: string, passwordHash: string): Promise<boolean> {
-        return compare(input, passwordHash);
-    }
-
     public static async fromInput({ email, login, password }: UserBuilderParams): Promise<User> {
         const user = new User();
         user.email = email;
@@ -31,5 +27,9 @@ export class User extends BaseEntity {
         user.passwordHash = await hash(password, ROUNDS);
 
         return user;
+    }
+
+    public async validatePassword(input: string, passwordHash: string): Promise<boolean> {
+        return compare(input, passwordHash);
     }
 }

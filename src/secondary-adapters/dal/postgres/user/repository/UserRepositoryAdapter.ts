@@ -1,9 +1,9 @@
 import { injectable } from "inversify";
-import { User } from "src/core/components/user/entities/user.entity";
-import { UserRepository } from "src/core/components/user/ports/user.repository";
 import { getRepository, Repository } from "typeorm";
 
-import { UserEntity } from "../data/user.entity";
+import { User } from "../../../../../core/components/user/entities/user.entity";
+import { UserRepository } from "../../../../../core/components/user/ports/user.repository";
+import { UserEntity } from "../data/user.orm-entity";
 
 @injectable()
 export class UserRepositoryPgAdapter implements UserRepository {

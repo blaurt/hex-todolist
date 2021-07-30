@@ -1,5 +1,4 @@
-import { BaseRepository } from "src/core/shared/interfaces/generic-crud.interface";
-
+import { BaseRepository } from "../../../shared/interfaces/generic-crud.interface";
 import { User } from "../entities/user.entity";
 
 export interface UserRepository extends BaseRepository<User> {

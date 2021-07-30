@@ -1,3 +1,5 @@
+import { injectable } from "inversify";
+
 const DEFAULT_USE_CASE_CONFIG = {
     shouldValidate: true,
     shouldTrimSensitiveData: true,
@@ -6,6 +8,7 @@ const DEFAULT_USE_CASE_CONFIG = {
 
 export type UseCaseProps = Partial<typeof DEFAULT_USE_CASE_CONFIG>;
 
+@injectable()
 export abstract class BaseUseCase<TInput = unknown, TResult = void> {
     private readonly shouldValidate: boolean;
     private readonly shouldTrimResult: boolean;

@@ -1,5 +1,6 @@
-import { BaseEntity } from "src/core/shared/entities/BaseEntity.entity";
 import { BeforeInsert, BeforeRemove, BeforeUpdate, Column, PrimaryGeneratedColumn } from "typeorm";
+
+import { BaseEntity } from "../../../../core/shared/entities/BaseEntity.entity";
 
 export abstract class BaseTypeORMEntity {
     @PrimaryGeneratedColumn()

@@ -1,10 +1,11 @@
+import { inject, injectable } from "inversify";
 import { pick } from "lodash";
-import { User } from "src/core/components/user/entities/user.entity";
-import { UserRepository } from "src/core/components/user/ports/user.repository";
-import { FindUserService } from "src/core/components/user/services/find-user.service";
-import { AppBaseException } from "src/core/shared/exceptions/app-base.exception";
-import { JwtService } from "src/secondary-adapters/services/jwt/jwt-service.interface";
 
+import { User } from "../../../core/components/user/entities/user.entity";
+import { UserRepository, UserRepositoryInjectionToken } from "../../../core/components/user/ports/user.repository";
+import { FindUserService } from "../../../core/components/user/services/find-user.service";
+import { AppBaseException } from "../../../core/shared/exceptions/app-base.exception";
+import { JwtService, JwtServiceInjectionToken } from "../../../secondary-adapters/services/jwt/jwt-service.interface";
 import { BaseUseCase } from "../../base.use-case";
 import { SignInValidationSchema } from "./sign-in.validation-schema";
 
@@ -22,12 +23,13 @@ interface Input {
 
 type Result = Pick<User, typeof PublicFields[number]> & { access_token: string };
 
+@injectable()
 export class SignInUseCase extends BaseUseCase<Input, Result> {
-    private readonly userService: FindUserService;
-
-    public constructor(private readonly repository: UserRepository, private readonly jwtService: JwtService) {
+    public constructor(
+        @inject(FindUserService) private readonly userService: FindUserService,
+        @inject(JwtServiceInjectionToken) private readonly jwtService: JwtService,
+    ) {
         super();
-        this.userService = new FindUserService(this.repository);
     }
 
     protected async validate({ login, password }: Pick<User, "login"> & { password: string }): Promise<void> {

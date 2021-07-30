@@ -26,7 +26,6 @@
         "eqeqeq": "error",
         "newline-before-return": "warn",
         "indent": ["warn", 4],
-        "linebreak-style": ["error", "unix"],
         "max-len": ["error", { "code": 150, "tabWidth": 4 }],
         "@typescript-eslint/member-ordering": ["warn"],
         "no-console": ["warn", { "allow": ["debug", "log", "error", "time", "timeEnd", "trace"] }],
@@ -95,6 +94,8 @@
         ],
         "multiline-ternary": ["warn", "always"],
         "operator-linebreak": ["warn", "before"],
-        "padding-line-between-statements": ["warn", { "blankLine": "always", "prev": "if", "next": "*" }]
+        "padding-line-between-statements": ["warn", { "blankLine": "always", "prev": "if", "next": "*" }],
+        "linebreak-style": ["error", "unix"]
+
     }
 }

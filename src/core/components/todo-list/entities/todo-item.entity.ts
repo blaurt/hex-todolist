@@ -1,4 +1,3 @@
-// import { BaseEntity } from "src/core/shared/entities/BaseEntity.entity";
 import { BaseEntity } from "../../../shared/entities/BaseEntity.entity";
 
 export class TodoItem extends BaseEntity {

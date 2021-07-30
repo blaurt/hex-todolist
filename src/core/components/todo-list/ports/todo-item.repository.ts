@@ -1,5 +1,4 @@
-import { BaseRepository } from "src/core/shared/interfaces/generic-crud.interface";
+import { BaseRepository } from "../../../shared/interfaces/generic-crud.interface";
 import { TodoItem } from "../entities/todo-item.entity";
 
-export interface TodoListRepository extends BaseRepository<TodoItem> {
-}
+export type TodoListRepository = BaseRepository<TodoItem>;

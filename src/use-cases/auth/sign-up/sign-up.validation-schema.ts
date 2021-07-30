@@ -1,8 +1,8 @@
-import Joi from "joi";
+import * as Joi from "joi";
 
 export const SignUpValidationSchema = Joi.object({
-    login: Joi.string(),
-    password: Joi.string(),
-    repeatPassword: Joi.string(),
-    email: Joi.string().email(),
+    login: Joi.string().required(),
+    password: Joi.string().required(),
+    repeatPassword: Joi.string().required(),
+    email: Joi.string().email().required(),
 });

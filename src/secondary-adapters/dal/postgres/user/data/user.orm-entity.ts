@@ -1,14 +1,10 @@
-import { User } from "src/core/components/user/entities/user.entity";
-import { Column, Entity, PrimaryColumn } from "typeorm";
+import { Column, Entity } from "typeorm";
 
+import { User } from "../../../../../core/components/user/entities/user.entity";
 import { BaseTypeORMEntity } from "../../shared/BaseTypeORMEntity";
-import { BaseTypeORMRepository } from "../../shared/BaseTypeORMRepository";
 
 @Entity({ name: "users" })
 export class UserEntity extends BaseTypeORMEntity {
-    // @PrimaryColumn({ name: "id", generated: true })
-    // readonly id?: number;
-
     @Column({ name: "email" })
     readonly email: string;
 

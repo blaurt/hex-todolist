@@ -1,7 +1,8 @@
-import { User } from "src/core/components/user/entities/user.entity";
-import { UserRepository } from "src/core/components/user/ports/user.repository";
-import { CreateUserService } from "src/core/components/user/services/create-user.service";
+import { inject, injectable } from "inversify";
 
+import { User } from "../../../core/components/user/entities/user.entity";
+import { UserRepository, UserRepositoryInjectionToken } from "../../../core/components/user/ports/user.repository";
+import { CreateUserService } from "../../../core/components/user/services/create-user.service";
 import { BaseUseCase } from "../../base.use-case";
 import { SignUpValidationSchema } from "./sign-up.validation-schema";
 
@@ -12,16 +13,14 @@ interface Input {
     email: string;
 }
 
+@injectable()
 export class SignUpUseCase extends BaseUseCase<Input, void> {
-    private readonly userService: CreateUserService;
-
-    public constructor(private readonly repository: UserRepository) {
+    public constructor(@inject(CreateUserService) private readonly userService: CreateUserService) {
         super();
-        this.userService = new CreateUserService(this.repository);
     }
 
-    protected async validate({ login, password }: Pick<User, "login"> & { password: string }): Promise<void> {
-        await SignUpValidationSchema.validateAsync({ login, password });
+    protected async validate({ login, password, email, repeatPassword }: Input): Promise<void> {
+        await SignUpValidationSchema.validateAsync({ login, password, email, repeatPassword });
     }
 
     protected trimResultData() {
