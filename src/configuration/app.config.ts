@@ -1,4 +1,5 @@
 export const appConfig = {
+    port: 3033,
     "jwt-secret": "secret_key_here",
     diContainerModulesPath: [
         __dirname + "/../core/component/**/*container-module.binding{.ts,.js}",
