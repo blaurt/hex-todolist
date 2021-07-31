@@ -1,6 +1,6 @@
 export interface ResponseFormat<T = unknown> {
     status: number;
     data: T;
-    errors: Array<Record<string, unknown>>;
+    errors: string[];
     metadata?: Record<string, unknown>;
 }

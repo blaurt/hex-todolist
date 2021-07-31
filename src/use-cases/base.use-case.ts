@@ -1,4 +1,6 @@
 import { injectable } from "inversify";
+import { ValidationError } from "joi";
+import { AppValidationException } from "src/core/shared/exceptions/validation.exception";
 
 const DEFAULT_USE_CASE_CONFIG = {
     shouldValidate: true,
@@ -20,7 +22,11 @@ export abstract class BaseUseCase<TInput = unknown, TResult = void> {
 
     public async execute(payload: TInput): Promise<TResult> {
         if (this.shouldValidate) {
-            await this.validate(payload);
+            try {
+                await this.validate(payload);
+            } catch (error) {
+                throw new AppValidationException()
+            }
         }
 
         const data = await this.handleRequest(payload);
@@ -29,6 +35,10 @@ export abstract class BaseUseCase<TInput = unknown, TResult = void> {
         }
 
         return data;
+    }
+
+    protected extractErrorMessages(error: ValidationError): string[] {
+        return error.details.map(({ message }) => message);
     }
 
     protected abstract trimResultData(data: unknown): TResult;

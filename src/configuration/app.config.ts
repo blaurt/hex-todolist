@@ -1,5 +1,5 @@
 export const appConfig = {
-    port: 3033,
+    port: 4000,
     node_env: process.env.NODE_ENV || "local", // todo type list of available environments
     logger: {
         level: "warn",

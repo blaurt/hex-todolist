@@ -1,7 +1,5 @@
 import { inject, injectable } from "inversify";
 
-import { User } from "../../../core/components/user/entities/user.entity";
-import { UserRepository, UserRepositoryInjectionToken } from "../../../core/components/user/ports/user.repository";
 import { CreateUserService } from "../../../core/components/user/services/create-user.service";
 import { BaseUseCase } from "../../base.use-case";
 import { SignUpValidationSchema } from "./sign-up.validation-schema";
@@ -20,7 +18,7 @@ export class SignUpUseCase extends BaseUseCase<Input, void> {
     }
 
     protected async validate({ login, password, email, repeatPassword }: Input): Promise<void> {
-        await SignUpValidationSchema.validateAsync({ login, password, email, repeatPassword });
+        await SignUpValidationSchema.validateAsync({ login, password, email, repeatPassword }, { abortEarly: false });
     }
 
     protected trimResultData() {
