@@ -18,6 +18,4 @@ function initLogger(): Logger {
     return pino(loggerOptions);
 }
 
-const logger = initLogger();
-
-export default logger;
+export const logger = initLogger();

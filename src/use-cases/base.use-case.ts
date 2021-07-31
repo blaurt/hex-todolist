@@ -22,11 +22,7 @@ export abstract class BaseUseCase<TInput = unknown, TResult = void> {
 
     public async execute(payload: TInput): Promise<TResult> {
         if (this.shouldValidate) {
-            try {
-                await this.validate(payload);
-            } catch (error) {
-                throw new AppValidationException()
-            }
+            await this.handleValidation(payload);
         }
 
         const data = await this.handleRequest(payload);
@@ -35,6 +31,14 @@ export abstract class BaseUseCase<TInput = unknown, TResult = void> {
         }
 
         return data;
+    }
+
+    protected async handleValidation(payload: TInput): Promise<void> {
+        try {
+            await this.validate(payload);
+        } catch (error) {
+            throw new AppValidationException({ errors: this.extractErrorMessages(error) });
+        }
     }
 
     protected extractErrorMessages(error: ValidationError): string[] {

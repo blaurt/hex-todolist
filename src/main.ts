@@ -1,6 +1,6 @@
 import { appConfig } from "./configuration/app.config";
 import { appInitializer } from "./lib/app-initilizer";
-import logger from "./lib/logger";
+import { logger } from "./lib/logger";
 import { bootstrap } from "./nest-js.bootrsrap";
 
 class Server {

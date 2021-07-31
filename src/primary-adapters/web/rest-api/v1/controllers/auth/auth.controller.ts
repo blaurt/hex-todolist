@@ -4,7 +4,7 @@ import { SignInUseCase } from "../../../../../../use-cases/auth/sign-in/sign-in.
 import { SignUpUseCase } from "../../../../../../use-cases/auth/sign-up/sign-up.use-case";
 import { AllExceptionsFilter } from "../../all-exceptions.exception-filter";
 import { ResponseFormat } from "../../response-format.interface";
-import { ResponseFormatter, ResponseFormatterInjectionToken } from "../../response-formatters/response-formatter.interface";
+import { ResponseFormatter, ResponseFormatterInjectionToken } from "../../utils/response-formatters/response-formatter.interface";
 import { UserSignInResponse } from "./sign-in.response";
 import { UserSignUpResponse } from "./sign-up.response";
 

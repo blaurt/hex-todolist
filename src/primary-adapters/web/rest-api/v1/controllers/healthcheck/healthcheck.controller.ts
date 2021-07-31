@@ -1,8 +1,8 @@
 import { Controller, Get, Inject, Res } from "@nestjs/common";
 import { Response } from "express";
 
-import { ResponseFormat } from "../../response-format.interface";
-import { ResponseFormatter, ResponseFormatterInjectionToken } from "../../response-formatters/response-formatter.interface";
+import { ResponseFormat } from "../../utils/response-formatters/response-format.interface";
+import { ResponseFormatter, ResponseFormatterInjectionToken } from "../../utils/response-formatters/response-formatter.interface";
 
 @Controller([
     "v1/health",
