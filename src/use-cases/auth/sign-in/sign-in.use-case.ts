@@ -4,7 +4,7 @@ import { pick } from "lodash";
 import { User } from "../../../core/components/user/entities/user.entity";
 import { UserRepository, UserRepositoryInjectionToken } from "../../../core/components/user/ports/user.repository";
 import { FindUserService } from "../../../core/components/user/services/find-user.service";
-import { AppBaseException } from "../../../core/shared/exceptions/app-base.exception";
+import { DomainBaseException } from "../../../core/shared/exceptions/app-base.exception";
 import { JwtService, JwtServiceInjectionToken } from "../../../secondary-adapters/services/jwt/jwt-service.interface";
 import { BaseUseCase } from "../../base.use-case";
 import { SignInValidationSchema } from "./sign-in.validation-schema";
@@ -39,12 +39,12 @@ export class SignInUseCase extends BaseUseCase<Input, Result> {
     protected async handleRequest({ login, password }) {
         const user = await this.userService.findByUsername(login);
         if (!user) {
-            throw new AppBaseException("User not found");
+            throw new DomainBaseException("User not found");
         }
 
         const isPasswordValid = await user.validatePassword(password, user.passwordHash);
         if (!isPasswordValid) {
-            throw new AppBaseException("Invalid password");
+            throw new DomainBaseException("Invalid password");
         }
 
         const token = await this.jwtService.sign({ userId: user.entityId });

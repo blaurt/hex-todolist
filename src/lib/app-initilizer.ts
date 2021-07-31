@@ -1,16 +1,16 @@
 import { createConnectionPool } from "../secondary-adapters/dal/postgres/create-connection-pool";
 import { JwtService, JwtServiceInjectionToken } from "../secondary-adapters/services/jwt/jwt-service.interface";
 import { SignUpUseCase } from "../use-cases/auth/sign-up/sign-up.use-case";
-import { DIContainerFactory } from "./di-container.factory";
+import { DIContainer } from "./di-container";
 
 class AppInitializer {
     public async initialize(): Promise<void> {
         this.initHttpLogging();
-        DIContainerFactory.getInstance();
+        DIContainer.getInstance();
         await this.initDatabase();
         this.initMiddleware();
 
-        const container = DIContainerFactory.getInstance();
+        const container = DIContainer.getInstance();
         console.log("🚀 ~ file: main.ts ~ line 11 ~ bootstrap ~ container", (container as any)._bindingDictionary);
         // const serv = container.get<ConfigService>(ConfigServiceInjectionToken);
         const serv = container.get<JwtService>(JwtServiceInjectionToken);

@@ -1,6 +1,6 @@
 import { Module } from "@nestjs/common";
 
-import { DIContainerFactory } from "../../../../lib/di-container.factory";
+import { DIContainer } from "../../../../lib/di-container";
 import { SignInUseCase } from "../../../../use-cases/auth/sign-in/sign-in.use-case";
 import { SignUpUseCase } from "../../../../use-cases/auth/sign-up/sign-up.use-case";
 import { AuthController } from "./controllers/auth/auth.controller";
@@ -21,7 +21,7 @@ import { ResponseFormatterInjectionToken } from "./utils/response-formatters/res
         {
             provide: SignUpUseCase,
             useFactory: () => {
-                const container = DIContainerFactory.getInstance();
+                const container = DIContainer.getInstance();
                 container.get<SignUpUseCase>(SignUpUseCase);
 
                 return container.get<SignUpUseCase>(SignUpUseCase);
@@ -30,7 +30,7 @@ import { ResponseFormatterInjectionToken } from "./utils/response-formatters/res
         {
             provide: SignInUseCase,
             useFactory: () => {
-                const container = DIContainerFactory.getInstance();
+                const container = DIContainer.getInstance();
 
                 return container.get<SignInUseCase>(SignInUseCase);
             },

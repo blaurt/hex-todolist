@@ -1,6 +1,6 @@
 import { inject, injectable } from "inversify";
 
-import { AppBaseException } from "../../../../core/shared/exceptions/app-base.exception";
+import { DomainBaseException } from "../../../../core/shared/exceptions/app-base.exception";
 import { User, UserBuilderParams } from "../entities/user.entity";
 import { UserRepository, UserRepositoryInjectionToken } from "../ports/user.repository";
 
@@ -13,7 +13,7 @@ export class CreateUserService {
 
         // todo refactor msg
         if (existingUser) {
-            throw new AppBaseException("Username is claimed");
+            throw new DomainBaseException("Username is claimed");
         }
 
         const newUser = await User.fromInput(input);
