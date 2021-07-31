@@ -4,19 +4,19 @@ import * as path from "path";
 
 import { appConfig } from "../configuration/app.config";
 
-export class DIContainerFactory {
+export class DIContainer {
     private static instance: Container;
 
     private constructor() {
-        DIContainerFactory.instance = this.createDIContainer(appConfig.diContainerModulesPath);
+        DIContainer.instance = this.createDIContainer(appConfig.diContainerModulesPath);
     }
 
     public static getInstance(): Container {
-        if (!DIContainerFactory.instance) {
-            DIContainerFactory.instance = new DIContainerFactory().createDIContainer(appConfig.diContainerModulesPath);
+        if (!DIContainer.instance) {
+            DIContainer.instance = new DIContainer().createDIContainer(appConfig.diContainerModulesPath);
         }
 
-        return DIContainerFactory.instance;
+        return DIContainer.instance;
     }
 
     private importContainerModuleInstancesFromDirectories(directories: string[], formats = [

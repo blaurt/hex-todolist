@@ -1,3 +1,1 @@
-export class AppBaseException extends Error {
-    
-}
+export class DomainBaseException extends Error {}

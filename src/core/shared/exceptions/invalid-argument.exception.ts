@@ -1,3 +1,3 @@
-import { AppBaseException } from "./app-base.exception";
+import { DomainBaseException } from "./app-base.exception";
 
-export class InvalidArgumentException extends AppBaseException {}
+export class InvalidArgumentException extends DomainBaseException {}

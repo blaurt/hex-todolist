@@ -1,7 +1,7 @@
 import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from "@nestjs/common";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
-import { DIContainerFactory } from "src/lib/di-container.factory";
+import { DIContainer } from "src/lib/di-container";
 
 import { ResponseFormatter, ResponseFormatterInjectionToken } from "./response-formatter.interface";
 
@@ -14,7 +14,7 @@ export class TransformInterceptor<T> implements NestInterceptor<T, Response<T>> 
     private readonly responseFormatter: ResponseFormatter;
 
     public constructor() {
-        const container = DIContainerFactory.getInstance();
+        const container = DIContainer.getInstance();
         this.responseFormatter = container.get<ResponseFormatter>(ResponseFormatterInjectionToken);
     }
 

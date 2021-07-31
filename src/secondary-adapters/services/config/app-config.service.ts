@@ -1,7 +1,7 @@
 import { injectable } from "inversify";
 
 import { appConfig } from "../../../configuration/app.config";
-import { AppBaseException } from "../../../core/shared/exceptions/app-base.exception";
+import { DomainBaseException } from "../../../core/shared/exceptions/app-base.exception";
 import { ConfigKeys, ConfigService } from "./config.interface";
 
 type ConfigMap = Map<ConfigKeys, typeof appConfig[ConfigKeys]>;
@@ -20,7 +20,7 @@ export class AppConfig implements ConfigService {
     public get(key: ConfigKeys) {
         const value = this.values.get(key);
         if (!value) {
-            throw new AppBaseException(`ConfigService has no value for key: "${key}"`);
+            throw new DomainBaseException(`ConfigService has no value for key: "${key}"`);
         }
 
         return value;
