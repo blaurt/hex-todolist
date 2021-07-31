@@ -8,10 +8,14 @@ interface Params {
 const DEFAULT_PARAMS: Params = { message: "Validation error", errors: [] };
 
 export class AppValidationException extends AppBaseException {
-    private readonly errors: string[] = [];
+    private readonly _errors: string[] = [];
 
     public constructor({ errors, message }: Params) {
         super(message ?? DEFAULT_PARAMS.message);
-        this.errors = errors ?? DEFAULT_PARAMS.errors;
+        this._errors = errors ?? DEFAULT_PARAMS.errors;
+    }
+
+    get errors() {
+        return this._errors;
     }
 }
