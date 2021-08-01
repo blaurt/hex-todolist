@@ -1,9 +1,9 @@
 import { injectable } from "inversify";
 import { getRepository, Repository } from "typeorm";
 
-import { User } from "../../../../../core/components/user/entities/user.entity";
-import { UserRepository } from "../../../../../core/components/user/ports/user.repository";
-import { UserEntity } from "../data/user.orm-entity";
+import { User } from "../../../../core/components/user/entities/user.entity";
+import { UserRepository } from "../../../../core/components/user/ports/user.repository";
+import { UserEntity } from "./user.orm-entity";
 
 @injectable()
 export class UserRepositoryPgAdapter implements UserRepository {
@@ -13,15 +13,17 @@ export class UserRepositoryPgAdapter implements UserRepository {
         this.baseRepo = getRepository(UserEntity);
     }
 
-    getBannedUsers(): Promise<User[]> {
+    public async getBannedUsers(): Promise<User[]> {
         throw new Error("Method not implemented.");
     }
 
-    update(entity: User, payload: Omit<Partial<User>, "entityId">): Promise<User> {
-        throw new Error("Method not implemented.");
+    public async update(entityId: User["entityId"], payload: Omit<Partial<User>, "entityId">): Promise<User> {
+        await this.baseRepo.update(entityId, payload);
+
+        return this.getById(entityId);
     }
 
-    getList(): Promise<User[]> {
+    public async getList(): Promise<User[]> {
         throw new Error("Method not implemented.");
     }
 
@@ -35,19 +37,22 @@ export class UserRepositoryPgAdapter implements UserRepository {
         const mappedData = UserEntity.fromDomainObject(entity);
         const savedEntity = await this.baseRepo.save(mappedData);
 
-        return UserEntity.toDomainObject(savedEntity);
+        return UserEntity.toDomainEntity(savedEntity);
     }
 
-    public async getById(id: string): Promise<User | null> {
-        const maybeEntity = await this.baseRepo.findOne({ where: { id } });
+    public async getById(id: User["entityId"]): Promise<User | null> {
+        const ormEntity = await this.baseRepo.findOne({ where: { id } });
+        if (ormEntity) {
+            return UserEntity.toDomainEntity(ormEntity);
+        }
 
-        return maybeEntity as unknown as User;
+        return null;
     }
 
     public async findByUsername(username: string): Promise<User | null> {
         const ormEntity = await this.baseRepo.findOne({ where: { login: username } });
         if (ormEntity) {
-            return UserEntity.toDomainObject(ormEntity);
+            return UserEntity.toDomainEntity(ormEntity);
         }
 
         return null;

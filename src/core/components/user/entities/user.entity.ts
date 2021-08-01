@@ -1,24 +1,15 @@
 import { compare, hash } from "bcrypt";
 
-import { BaseEntity } from "../../../shared/entities/BaseEntity.entity";
+import { BaseEntity, BaseEntityConstructorProps } from "../../../shared/entities/base-entity.entity";
+import { UserBuilderParams } from "./user-builder.params.interface";
 
 // todo replace with adv encryptor
 const ROUNDS = 10 as const;
-
-export interface UserBuilderParams {
-    login: User["login"];
-    email: User["email"];
-    password: string;
-}
 
 export class User extends BaseEntity {
     public login: string;
     public email: string;
     public passwordHash: string;
-
-    public constructor(entityId?: BaseEntity["entityId"]) {
-        super(entityId);
-    }
 
     public static async fromInput({ email, login, password }: UserBuilderParams): Promise<User> {
         const user = new User();

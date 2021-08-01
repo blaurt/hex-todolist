@@ -1,4 +1,4 @@
-import { BaseEntity } from "../../../shared/entities/BaseEntity.entity";
+import { BaseEntity } from "../../../shared/entities/base-entity.entity";
 
 export class TodoItem extends BaseEntity {
     private readonly _isDone: boolean;

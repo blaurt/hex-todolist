@@ -1,6 +1,5 @@
 import { inject, injectable } from "inversify";
 
-import { DomainBaseException } from "../../../shared/exceptions/domain-base.exception";
 import { User, UserBuilderParams } from "../entities/user.entity";
 import { DuplicateUserException } from "../exceptions/duplicate-user.exception";
 import { UserRepository, UserRepositoryInjectionToken } from "../ports/user.repository";
