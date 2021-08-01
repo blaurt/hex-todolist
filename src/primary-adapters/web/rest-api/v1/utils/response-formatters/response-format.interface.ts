@@ -1,6 +1,9 @@
+import { ErrorDescriptor } from "src/shared/interfaces/error-descriptor.interface";
+
 export interface ResponseFormat<T = unknown> {
-    status: number;
     data: T;
-    errors: string[];
+    error: ErrorDescriptor | null;
+    path: string;
+    timestamp: string;
     metadata?: Record<string, unknown>;
 }

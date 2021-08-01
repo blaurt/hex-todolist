@@ -5,8 +5,6 @@ import { SignInUseCase } from "../../../../use-cases/auth/sign-in/sign-in.use-ca
 import { SignUpUseCase } from "../../../../use-cases/auth/sign-up/sign-up.use-case";
 import { AuthController } from "./controllers/auth/auth.controller";
 import { HealthCheckController } from "./controllers/healthcheck/healthcheck.controller";
-import { JsonResponseFormatter } from "./utils/response-formatters/json-response-formatter";
-import { ResponseFormatterInjectionToken } from "./utils/response-formatters/response-formatter.interface";
 
 @Module({
     controllers: [
@@ -14,10 +12,6 @@ import { ResponseFormatterInjectionToken } from "./utils/response-formatters/res
         AuthController,
     ],
     providers: [
-        {
-            provide: ResponseFormatterInjectionToken,
-            useClass: JsonResponseFormatter,
-        },
         {
             provide: SignUpUseCase,
             useFactory: () => {

@@ -1,4 +1,4 @@
-import { DomainBaseException } from "src/core/shared/exceptions/app-base.exception";
+import { DomainBaseException } from "src/core/shared/exceptions/domain-base.exception";
 
 export interface ErrorMapper {
     mapException<T extends Error>(exception: DomainBaseException): T;

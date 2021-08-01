@@ -45,8 +45,11 @@ export class UserRepositoryPgAdapter implements UserRepository {
     }
 
     public async findByUsername(username: string): Promise<User | null> {
-        const maybeEntity = await this.baseRepo.findOne({ where: { login: username } });
+        const ormEntity = await this.baseRepo.findOne({ where: { login: username } });
+        if (ormEntity) {
+            return UserEntity.toDomainObject(ormEntity);
+        }
 
-        return maybeEntity as unknown as User;
+        return null;
     }
 }

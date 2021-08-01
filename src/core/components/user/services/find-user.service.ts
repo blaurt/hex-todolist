@@ -1,6 +1,6 @@
 import { inject, injectable } from "inversify";
+import { EntityNotFoundException } from "src/core/shared/exceptions/entity-not-found.exception";
 
-import { DomainBaseException } from "../../../../core/shared/exceptions/app-base.exception";
 import { User } from "../entities/user.entity";
 import { UserRepository, UserRepositoryInjectionToken } from "../ports/user.repository";
 
@@ -11,7 +11,7 @@ export class FindUserService {
     public async findByUsername(username: User["login"]): Promise<User> {
         const user = await this.repository.findByUsername(username);
         if (!user) {
-            throw new DomainBaseException("Entity not found");
+            throw new EntityNotFoundException("User was not found");
         }
 
         return user;

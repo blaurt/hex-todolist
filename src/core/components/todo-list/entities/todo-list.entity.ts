@@ -1,5 +1,5 @@
 import { BaseEntity } from "../../../shared/entities/BaseEntity.entity";
-import { DomainBaseException } from "../../../shared/exceptions/app-base.exception";
+import { DomainBaseException } from "../../../shared/exceptions/domain-base.exception";
 import { TodoItem } from "./todo-item.entity";
 
 export class TodoList extends BaseEntity {

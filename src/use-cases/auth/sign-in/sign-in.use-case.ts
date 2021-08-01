@@ -4,7 +4,7 @@ import { pick } from "lodash";
 import { User } from "../../../core/components/user/entities/user.entity";
 import { UserRepository, UserRepositoryInjectionToken } from "../../../core/components/user/ports/user.repository";
 import { FindUserService } from "../../../core/components/user/services/find-user.service";
-import { DomainBaseException } from "../../../core/shared/exceptions/app-base.exception";
+import { DomainBaseException } from "../../../core/shared/exceptions/domain-base.exception";
 import { JwtService, JwtServiceInjectionToken } from "../../../secondary-adapters/services/jwt/jwt-service.interface";
 import { BaseUseCase } from "../../base.use-case";
 import { SignInValidationSchema } from "./sign-in.validation-schema";

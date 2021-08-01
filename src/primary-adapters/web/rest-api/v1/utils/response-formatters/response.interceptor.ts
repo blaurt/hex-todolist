@@ -1,8 +1,8 @@
 import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from "@nestjs/common";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
-import { DIContainer } from "src/lib/di-container";
 
+import { DIContainer } from "../../../../../../lib/di-container";
 import { ResponseFormatter, ResponseFormatterInjectionToken } from "./response-formatter.interface";
 
 export interface Response<T> {
@@ -18,7 +18,9 @@ export class TransformInterceptor<T> implements NestInterceptor<T, Response<T>> 
         this.responseFormatter = container.get<ResponseFormatter>(ResponseFormatterInjectionToken);
     }
 
-    public intercept(context: ExecutionContext, next: CallHandler): Observable<Response<T>> {
-        return next.handle().pipe(map((data) => this.responseFormatter.formatSuccess(data)));
+    public intercept(ctx: ExecutionContext, next: CallHandler): Observable<Response<T>> {
+        const request = ctx.switchToHttp().getRequest();
+
+        return next.handle().pipe(map((data) => this.responseFormatter.formatSuccess(data, request.url)));
     }
 }

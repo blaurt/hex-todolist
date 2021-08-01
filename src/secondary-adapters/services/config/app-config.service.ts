@@ -1,7 +1,7 @@
 import { injectable } from "inversify";
 
 import { appConfig } from "../../../configuration/app.config";
-import { DomainBaseException } from "../../../core/shared/exceptions/app-base.exception";
+import { DomainBaseException } from "../../../core/shared/exceptions/domain-base.exception";
 import { ConfigKeys, ConfigService } from "./config.interface";
 
 type ConfigMap = Map<ConfigKeys, typeof appConfig[ConfigKeys]>;

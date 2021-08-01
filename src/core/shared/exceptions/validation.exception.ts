@@ -1,4 +1,5 @@
-import { DomainBaseException } from "./app-base.exception";
+import { DomainBaseException } from "./domain-base.exception";
+import { ClientException } from "./client.exception";
 
 interface Params {
     message?: string;
@@ -7,7 +8,7 @@ interface Params {
 
 const DEFAULT_PARAMS: Params = { message: "Validation error", errors: [] };
 
-export class AppValidationException extends DomainBaseException {
+export class InvalidArgumentException extends ClientException {
     private readonly _errors: string[] = [];
 
     public constructor({ errors, message }: Params) {

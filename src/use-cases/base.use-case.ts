@@ -1,6 +1,6 @@
 import { injectable } from "inversify";
 import { ValidationError } from "joi";
-import { AppValidationException } from "src/core/shared/exceptions/validation.exception";
+import { InvalidArgumentException } from "src/core/shared/exceptions/validation.exception";
 
 const DEFAULT_USE_CASE_CONFIG = {
     shouldValidate: true,
@@ -37,7 +37,7 @@ export abstract class BaseUseCase<TInput = unknown, TResult = void> {
         try {
             await this.validate(payload);
         } catch (error) {
-            throw new AppValidationException({ errors: this.extractErrorMessages(error) });
+            throw new InvalidArgumentException({ errors: this.extractErrorMessages(error) });
         }
     }
 
