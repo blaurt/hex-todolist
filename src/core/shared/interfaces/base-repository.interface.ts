@@ -5,14 +5,12 @@ type GetListOptioins = {
     offset: number;
 };
 
-export interface BaseRepository<T extends BaseEntity, TGetListCondition = any> {
+type ImmutableFields = typeof BaseEntityImmutableFields[number];
+export interface BaseRepository<T extends BaseEntity> {
     save(entity: T): Promise<T>;
-    update(
-        // <U extends typeof BaseEntityImmutableFields[number] = typeof BaseEntityImmutableFields>(
-        entityId: T["entityId"],
-        payload: Partial<T>,
-    ): Promise<T>;
+    update<U extends ImmutableFields = any>(entityId: T["entityId"], payload: Partial<T>): Promise<T>;
+    // update<U extends typeof BaseEntityImmutableFields[number]>(entityId: T["entityId"], payload: Omit<Partial<T>, U>): Promise<T>;
     getById(entityId: T["entityId"]): Promise<T | null>;
-    getList(cond: TGetListCondition, options: GetListOptioins): Promise<T[]>;
+    getList<TGetListCondition = any>(cond: TGetListCondition, options: GetListOptioins): Promise<T[]>;
     delete(entityId: T["entityId"]): Promise<void>;
 }

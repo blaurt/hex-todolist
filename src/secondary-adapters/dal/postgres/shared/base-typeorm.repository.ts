@@ -1,39 +1,29 @@
 import { injectable } from "inversify";
-import { BaseEntity } from "src/core/shared/entities/base-entity.entity";
+import { TodoList } from "src/core/components/todo-list/entities/todo-list.entity";
+import { BaseEntity, BaseEntityImmutableFields } from "src/core/shared/entities/base-entity.entity";
 import { BaseRepository } from "src/core/shared/interfaces/base-repository.interface";
 import { EntityMapper } from "src/shared/interfaces/entity-mapper.interface";
 import { ClassType } from "src/shared/types/class-type.type";
 import { DeepPartial, FindManyOptions, getRepository, Repository } from "typeorm";
 import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
 
-import { TodoListEntity } from "../todo-list/todo-list.orm-entity";
 import { BaseTypeOrmEntity } from "./base-typeorm-entity.orm-entity";
 
-// const ImmutableFields: Readonly<Array<keyof BaseTypeOrmEntity>> = [
-//     "entity_id",
-//     "created_at",
-//     "updated_at",
-//     "deleted_at",
-// ] as const;
+const ImmutableFields = [
+    ...BaseEntityImmutableFields,
+    ...BaseOrmEntityImmutableFields,
+];
 
-function createEnum<T extends { [P in keyof T]: P }>(o: T) {
-    return o;
-}
-
-type DeepPartial<T> = {
-    [P in keyof T]?: DeepPartial<T[P]>;
+type UpdatableFields<TDomainEntity> = Omit<Partial<TDomainEntity>, typeof ImmutableFields[number]>;
+// type UpdatableFields<TDomainEntity> = Omit<Omit<Partial<TDomainEntity>, typeof ImmutableFields[number]>, typeof BaseEntityImmutableFields[number]>;
+const x: UpdatableFields<TodoList> = {
+    isDone: true,
+    // deleted_at: "asdf",
+    deletedAt: "asdf",
 };
-
-type x1 = DeepPartial<TodoListEntity>;
-type x2 = QueryDeepPartialEntity<TodoListEntity>;
-
-let xx1: x1 = {};
-const xx2: x2 = {};
-xx1 = xx2;
-
 @injectable()
 export abstract class BaseTypeOrmRepository<TDomainEntity extends BaseEntity, TOrmEntity extends BaseTypeOrmEntity>
-implements BaseRepository<TDomainEntity, FindManyOptions> {
+implements BaseRepository<TDomainEntity> {
     protected readonly baseRepo: Repository<TOrmEntity>;
     protected readonly entityMapper: EntityMapper<TDomainEntity, TOrmEntity>;
 
@@ -42,9 +32,8 @@ implements BaseRepository<TDomainEntity, FindManyOptions> {
         this.entityMapper = entityMapper;
     }
 
-    // todo Omit ImmutableFields, create type like Omit<Pick<PublicFields>, PrivateFields>
-    public async update(entityId: TDomainEntity["entityId"], payload: DeepPartial<TDomainEntity>): Promise<TDomainEntity> {
-        await this.baseRepo.update(entityId, payload);
+    public async update(entityId: TDomainEntity["entityId"], payload: UpdatableFields<TDomainEntity>): Promise<TDomainEntity> {
+        const normalizedPayload = await this.baseRepo.update(entityId, payload as unknown as QueryDeepPartialEntity<TOrmEntity>);
 
         return this.getById(entityId) as Promise<TDomainEntity>;
     }

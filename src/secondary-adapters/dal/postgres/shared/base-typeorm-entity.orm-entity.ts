@@ -2,6 +2,12 @@ import { BeforeInsert, BeforeRemove, BeforeUpdate, Column, Index, PrimaryGenerat
 
 import { BaseEntity } from "../../../../core/shared/entities/base-entity.entity";
 
+export const BaseOrmEntityImmutableFields: Readonly<Array<keyof BaseTypeOrmEntity>> = [
+    "entity_id",
+    "created_at",
+    "updated_at",
+    "deleted_at",
+] as const;
 export abstract class BaseTypeOrmEntity {
     @PrimaryGeneratedColumn()
     readonly id: number;
@@ -9,27 +15,6 @@ export abstract class BaseTypeOrmEntity {
     @Index()
     @Column({ type: "uuid" })
     readonly entity_id: BaseEntity["entityId"];
-
-    // @Column({ name: "created_at" })
-    // _created_at: string;
-
-    // @Column({ name: "updated_at" })
-    // _updated_at: string;
-
-    // @Column({ name: "deleted_at" })
-    // _deleted_at: string | null;
-
-    // get created_at() {
-    //     return this._created_at;
-    // }
-
-    // get updated_at() {
-    //     return this._updated_at;
-    // }
-
-    // get deleted_at() {
-    //     return this._deleted_at;
-    // }
 
     @Column()
     created_at: string;

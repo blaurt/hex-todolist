@@ -86,6 +86,6 @@ export class TodoListRepositoryPgAdapter extends BaseTypeOrmRepository<TodoList,
     }
 
     async test() {
-        const res = await this.update("asdf", { isDone: true });
+        const res = await this.update("asdf", { isDone: true, deletedAt: "asdf" });
     }
 }
