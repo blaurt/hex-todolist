@@ -96,7 +96,7 @@
         "operator-linebreak": ["warn", "before"],
         "padding-line-between-statements": ["warn", { "blankLine": "always", "prev": "if", "next": "*" }],
         "linebreak-style": ["error", "unix"],
-        "newline-per-chained-call": ["warn", { "ignoreChainWithDepth": 2 }]
-
+        "newline-per-chained-call": ["warn", { "ignoreChainWithDepth": 2 }],
+        "object-property-newline": ["error"]
     }
 }

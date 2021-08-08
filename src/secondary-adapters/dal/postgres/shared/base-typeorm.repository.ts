@@ -1,5 +1,5 @@
 import { injectable } from "inversify";
-import { TodoList } from "src/core/components/todo-list/entities/todo-list.entity";
+import { omit } from "lodash";
 import { BaseEntity, BaseEntityImmutableFields } from "src/core/shared/entities/base-entity.entity";
 import { BaseRepository } from "src/core/shared/interfaces/base-repository.interface";
 import { EntityMapper } from "src/shared/interfaces/entity-mapper.interface";
@@ -7,7 +7,7 @@ import { ClassType } from "src/shared/types/class-type.type";
 import { DeepPartial, FindManyOptions, getRepository, Repository } from "typeorm";
 import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
 
-import { BaseTypeOrmEntity } from "./base-typeorm-entity.orm-entity";
+import { BaseOrmEntityImmutableFields, BaseTypeOrmEntity } from "./base-typeorm-entity.orm-entity";
 
 const ImmutableFields = [
     ...BaseEntityImmutableFields,
@@ -15,12 +15,7 @@ const ImmutableFields = [
 ];
 
 type UpdatableFields<TDomainEntity> = Omit<Partial<TDomainEntity>, typeof ImmutableFields[number]>;
-// type UpdatableFields<TDomainEntity> = Omit<Omit<Partial<TDomainEntity>, typeof ImmutableFields[number]>, typeof BaseEntityImmutableFields[number]>;
-const x: UpdatableFields<TodoList> = {
-    isDone: true,
-    // deleted_at: "asdf",
-    deletedAt: "asdf",
-};
+
 @injectable()
 export abstract class BaseTypeOrmRepository<TDomainEntity extends BaseEntity, TOrmEntity extends BaseTypeOrmEntity>
 implements BaseRepository<TDomainEntity> {
@@ -33,7 +28,8 @@ implements BaseRepository<TDomainEntity> {
     }
 
     public async update(entityId: TDomainEntity["entityId"], payload: UpdatableFields<TDomainEntity>): Promise<TDomainEntity> {
-        const normalizedPayload = await this.baseRepo.update(entityId, payload as unknown as QueryDeepPartialEntity<TOrmEntity>);
+        const clearedPayload = omit(payload, ImmutableFields) as unknown as QueryDeepPartialEntity<TOrmEntity>;
+        await this.baseRepo.update(entityId, clearedPayload);
 
         return this.getById(entityId) as Promise<TDomainEntity>;
     }

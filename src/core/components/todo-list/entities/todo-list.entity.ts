@@ -13,10 +13,6 @@ export class TodoList extends BaseEntity {
     public isPrivate = true;
     public userId: User["entityId"];
 
-    public constructor(entityId?: BaseEntity["entityId"]) {
-        super(entityId);
-    }
-
     public static async fromInput({ title, description, isPrivate }: TodoListBuilderParams): Promise<TodoList> {
         const list = new TodoList();
         list.title = title;

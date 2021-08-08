@@ -6,16 +6,29 @@ import { TodoListEntity } from "./todo-list.orm-entity";
 
 @injectable()
 export class TodoListEntityMapper implements EntityMapper<TodoList, TodoListEntity> {
-    public fromDomainEntity(domainEntity: TodoList): TodoListEntity {
+    public fromDomainEntity({ createdAt, updatedAt, deletedAt, userId, entityId, ...rest }: TodoList): TodoListEntity {
         const list: TodoListEntity = new TodoListEntity();
-        Object.assign(list, { ...domainEntity, user_id: domainEntity.userId });
+        Object.assign(list, {
+            ...rest,
+            user_id: userId,
+            entity_id: entityId,
+            created_at: createdAt,
+            updated_at: updatedAt,
+            deleted_at: deletedAt,
+        });
 
         return list;
     }
 
-    public toDomainEntity(ormEntity: TodoListEntity): TodoList {
-        const list: TodoList = new TodoList(ormEntity.entity_id);
-        Object.assign(list, { ...ormEntity, userId: ormEntity.user_id });
+    public toDomainEntity({ user_id, entity_id, created_at, updated_at, deleted_at, ...rest }: TodoListEntity): TodoList {
+        const list: TodoList = new TodoList({ entityId: entity_id });
+        Object.assign(list, {
+            ...rest,
+            userId: user_id,
+            createdAt: created_at,
+            updatedAt: updated_at,
+            deletedAt: deleted_at,
+        });
 
         return list;
     }
