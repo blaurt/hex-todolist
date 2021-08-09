@@ -3,7 +3,7 @@ import { BaseRepository } from "../../../shared/interfaces/base-repository.inter
 import { TodoList } from "../entities/todo-list.entity";
 
 export interface TodoListRepository extends BaseRepository<TodoList> {
-    getUserLists(userId: User["entityId"]): Promise<TodoList[]>;
+    getUserLists(userId: User["entityId"], props?: { includeDeleted?: boolean }): Promise<TodoList[]>;
 }
 
 export const TodoListRepositoryInjectionToken = Symbol("TodoListRepository");

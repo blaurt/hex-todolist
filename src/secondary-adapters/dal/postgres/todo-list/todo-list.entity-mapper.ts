@@ -4,6 +4,9 @@ import { EntityMapper } from "src/shared/interfaces/entity-mapper.interface";
 
 import { TodoListEntity } from "./todo-list.orm-entity";
 
+// todo add builders
+// todo add support of items
+
 @injectable()
 export class TodoListEntityMapper implements EntityMapper<TodoList, TodoListEntity> {
     public fromDomainEntity({ createdAt, updatedAt, deletedAt, userId, entityId, ...rest }: TodoList): TodoListEntity {

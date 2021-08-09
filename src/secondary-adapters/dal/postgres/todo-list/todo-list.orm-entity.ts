@@ -19,10 +19,12 @@ export class TodoListEntity extends BaseTypeOrmEntity {
     @Column()
     isPrivate: TodoList["isPrivate"];
 
-    @Index()
-    @Column()
-    user_id: TodoList["userId"];
+    // @Index()
+    // @Column()
+    // user_id: TodoList["userId"];
+
+    // @ManyToOne(() => User, user => user.photos)
 
     @ManyToOne(() => UserEntity)
-    user: number;
+    user: UserEntity;
 }

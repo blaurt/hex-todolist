@@ -14,7 +14,7 @@ export class TodoListRepositoryPgAdapter extends BaseTypeOrmRepository<TodoList,
         super(TodoListEntity, mapper);
     }
 
-    public async getUserLists(userId: User["entityId"], includeDeleted = false): Promise<TodoList[]> {
+    public async getUserLists(userId: User["entityId"], { includeDeleted } = { includeDeleted: false }): Promise<TodoList[]> {
         let lists: TodoListEntity[];
         if (includeDeleted) {
             lists = await this.baseRepo.find({ user_id: userId });

@@ -1,25 +1,32 @@
 import { ClientException } from "src/core/shared/exceptions/client.exception";
 
-import { BaseEntity } from "../../../shared/entities/base-entity.entity";
+import { BaseEntity, BaseEntityConstructorParams } from "../../../shared/entities/base-entity.entity";
 import { User } from "../../user/entities/user.entity";
-import { TodoItem } from "./todo-item.entity";
-import { TodoListBuilderParams } from "./todo-list-builder-params.interface";
+import { TodoItem } from "../bound-entities/todo-item/entities/todo-item.entity";
+
+export interface TodoListConstructorParams {
+    title: TodoList["title"];
+    description: TodoList["description"];
+    isPrivate?: TodoList["isPrivate"];
+    isDone?: TodoList["isDone"];
+    userId: TodoList["userId"];
+}
 
 export class TodoList extends BaseEntity {
     public title: string;
     public description: string;
-    public items: TodoItem[];
-    public isDone = false;
-    public isPrivate = true;
+    public items: TodoItem[] = [];
+    public isDone: boolean;
+    public isPrivate: boolean;
     public userId: User["entityId"];
 
-    public static async fromInput({ title, description, isPrivate }: TodoListBuilderParams): Promise<TodoList> {
-        const list = new TodoList();
-        list.title = title;
-        list.description = description;
-        list.isPrivate = isPrivate;
-
-        return list;
+    public constructor({ title, description, userId, isPrivate, isDone, ...baseParams }: TodoListConstructorParams & BaseEntityConstructorParams) {
+        super(baseParams);
+        this.title = title;
+        this.description = description;
+        this.isPrivate = isPrivate ?? false;
+        this.isDone = isDone ?? false;
+        this.userId = userId;
     }
 
     public markAsDone(): void {

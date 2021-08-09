@@ -10,10 +10,16 @@ const DEFAULT_USE_CASE_CONFIG = {
 
 export type UseCaseProps = Partial<typeof DEFAULT_USE_CASE_CONFIG>;
 
+export interface ValidationSchema<T> {
+    validateAsync: (value: any, options: { abortEarly: boolean }) => Promise<T>;
+}
+
 @injectable()
 export abstract class BaseUseCase<TInput = unknown, TResult = void> {
     private readonly shouldValidate: boolean;
     private readonly shouldTrimResult: boolean;
+
+    protected abstract readonly validationSchema: ValidationSchema<TInput>;
 
     public constructor(props: UseCaseProps = DEFAULT_USE_CASE_CONFIG) {
         this.shouldValidate = props.shouldValidate ?? DEFAULT_USE_CASE_CONFIG.shouldValidate;
@@ -45,7 +51,10 @@ export abstract class BaseUseCase<TInput = unknown, TResult = void> {
         return error.details.map(({ message }) => message);
     }
 
+    protected async validate(data: TInput): Promise<void> {
+        await this.validationSchema.validateAsync(data, { abortEarly: true });
+    }
+
     protected abstract trimResultData(data: unknown): TResult;
     protected abstract handleRequest(payload: unknown): any;
-    protected abstract validate(data: TInput): Promise<void>;
 }

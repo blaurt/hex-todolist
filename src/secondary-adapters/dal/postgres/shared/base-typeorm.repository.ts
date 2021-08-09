@@ -1,10 +1,10 @@
 import { injectable } from "inversify";
 import { omit } from "lodash";
 import { BaseEntity, BaseEntityImmutableFields } from "src/core/shared/entities/base-entity.entity";
-import { BaseRepository } from "src/core/shared/interfaces/base-repository.interface";
+import { BaseRepository, GetByIdOptions, GetListOptions } from "src/core/shared/interfaces/base-repository.interface";
 import { EntityMapper } from "src/shared/interfaces/entity-mapper.interface";
 import { ClassType } from "src/shared/types/class-type.type";
-import { DeepPartial, FindManyOptions, getRepository, Repository } from "typeorm";
+import { DeepPartial, FindConditions, FindManyOptions, getRepository, IsNull, Repository } from "typeorm";
 import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
 
 import { BaseOrmEntityImmutableFields, BaseTypeOrmEntity } from "./base-typeorm-entity.orm-entity";
@@ -34,8 +34,17 @@ implements BaseRepository<TDomainEntity> {
         return this.getById(entityId) as Promise<TDomainEntity>;
     }
 
-    public async getById(entityId: BaseEntity["entityId"]): Promise<TDomainEntity | null> {
-        const ormEntity = await this.baseRepo.findOne({ where: { entityId } });
+    public async getById(
+        entityId: BaseEntity["entityId"],
+        { includeDeleted }: GetByIdOptions = { includeDeleted: false },
+    ): Promise<TDomainEntity | null> {
+        const condition: FindConditions<TOrmEntity> = { entity_id: entityId,
+            deleted_at: IsNull() };
+        if (includeDeleted) {
+            delete (condition as any).deleted_at;
+        }
+
+        const ormEntity = await this.baseRepo.findOne({ where: condition });
         if (ormEntity) {
             return this.entityMapper.toDomainEntity(ormEntity);
         }
@@ -43,7 +52,9 @@ implements BaseRepository<TDomainEntity> {
         return null;
     }
 
-    public async getList(cond: FindManyOptions<TDomainEntity>, { limit = 0, offset = 0 }): Promise<TDomainEntity[]> {
+    public async getList(cond: FindManyOptions<TDomainEntity>, options: GetListOptions = {}): Promise<TDomainEntity[]> {
+        const { limit, offset } = Object.assign({ limit: 100,
+            offset: 0 }, options);
         const ormEntities = await this.baseRepo.createQueryBuilder().where(cond)
             .limit(limit)
             .skip(offset)
@@ -59,14 +70,7 @@ implements BaseRepository<TDomainEntity> {
         return this.entityMapper.toDomainEntity(savedEntity);
     }
 
-    // // public async update(entityId: TDomainEntity["entityId"], payload: ): Promise<TDomainEntity> {
-    // public async update(entityId: TDomainEntity["entityId"], payload): Promise<TDomainEntity> {
-    //     await this.baseRepo.update(entityId, payload as QueryDeepPartialEntity<TOrmEntity>);
-
-    //     return this.getById(entityId) as Promise<TDomainEntity>;
-    // }
-
     public async delete(entityId: TDomainEntity["entityId"]): Promise<void> {
-        // await this.baseRepo.update(entityId, { deleted_at: new Date().toISOString() });
+        await this.baseRepo.update(entityId, { deleted_at: new Date().toISOString() } as unknown as QueryDeepPartialEntity<TOrmEntity>);
     }
 }

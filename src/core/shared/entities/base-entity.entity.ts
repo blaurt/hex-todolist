@@ -7,7 +7,7 @@ export const BaseEntityImmutableFields: Readonly<Array<keyof BaseEntity>> = [
     "deletedAt",
 ] as const;
 
-export interface BaseEntityConstructorProps {
+export interface BaseEntityConstructorParams {
     entityId?: BaseEntity["entityId"];
     createdAt?: BaseEntity["createdAt"];
     updatedAt?: BaseEntity["updatedAt"];
@@ -20,7 +20,7 @@ export abstract class BaseEntity {
     private readonly _updatedAt: string;
     private readonly _deletedAt: string | null;
 
-    public constructor({ entityId, createdAt, updatedAt, deletedAt }: BaseEntityConstructorProps = {}) {
+    public constructor({ entityId, createdAt, updatedAt, deletedAt }: BaseEntityConstructorParams = {}) {
         this._entityId = entityId ?? v4();
         const dateNow = new Date().toISOString();
         this._createdAt = createdAt ?? dateNow;

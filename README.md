@@ -6,6 +6,9 @@
 - designed according to hexagonal architecture principles
 - REST-api is going to be implemented with [Nest](https://github.com/nestjs/nest) framework
 
+## dev notes
+- builder classes are used in non-classic way. They are just to compose corresponding entities in a single correct way. Thats why they dont implement classic builder interfaces like ```{setName(), setAge(), etc()}```.
+
 ## Roadmap / To be done:
 - auto snake-case transform
 - use command-query. A command can be used to validate input

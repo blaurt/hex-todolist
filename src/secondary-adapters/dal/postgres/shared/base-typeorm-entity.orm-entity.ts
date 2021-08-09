@@ -10,7 +10,7 @@ export const BaseOrmEntityImmutableFields: Readonly<Array<keyof BaseTypeOrmEntit
 ] as const;
 export abstract class BaseTypeOrmEntity {
     @PrimaryGeneratedColumn()
-    readonly id: number; 
+    readonly id: number;
 
     @Index()
     @Column({ type: "uuid" })
