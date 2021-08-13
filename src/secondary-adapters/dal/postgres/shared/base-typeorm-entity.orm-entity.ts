@@ -9,9 +9,6 @@ export const BaseOrmEntityImmutableFields: Readonly<Array<keyof BaseTypeOrmEntit
     "deleted_at",
 ] as const;
 export abstract class BaseTypeOrmEntity {
-    @PrimaryGeneratedColumn()
-    readonly id: number;
-
     @Index()
     @Column({ type: "uuid" })
     readonly entity_id: BaseEntity["entityId"];
@@ -24,6 +21,13 @@ export abstract class BaseTypeOrmEntity {
 
     @Column({ nullable: true })
     deleted_at: string;
+
+    /**
+     * This is private field for DB usage only
+     * Rely your logic on entity_id
+     */
+    @PrimaryGeneratedColumn()
+    private readonly id: number;
 
     @BeforeInsert()
     beforeCreate() {

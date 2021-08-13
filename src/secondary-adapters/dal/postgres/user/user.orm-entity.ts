@@ -18,14 +18,17 @@ export class UserEntity extends BaseTypeOrmEntity {
 
     public static fromDomainObject(domainEntity: User): UserEntity {
         const user: UserEntity = new UserEntity();
-        Object.assign(user, { ...domainEntity, password_hash: domainEntity.passwordHash, entity_id: domainEntity.entityId });
+        Object.assign(user, { ...domainEntity,
+            password_hash: domainEntity.passwordHash,
+            entity_id: domainEntity.entityId });
 
         return user;
     }
 
     public static toDomainEntity(ormEntity: UserEntity): User {
-        const user = new User(ormEntity.entity_id);
-        Object.assign(user, { ...ormEntity, passwordHash: ormEntity.password_hash });
+        const user = new User({ entityId: ormEntity.entity_id });
+        Object.assign(user, { ...ormEntity,
+            passwordHash: ormEntity.password_hash });
 
         return user;
     }

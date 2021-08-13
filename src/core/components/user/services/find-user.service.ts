@@ -1,6 +1,6 @@
 import { inject, injectable } from "inversify";
-import { EntityNotFoundException } from "src/core/shared/exceptions/entity-not-found.exception";
 
+import { EntityNotFoundException } from "../../../shared/exceptions/entity-not-found.exception";
 import { User } from "../entities/user.entity";
 import { UserRepository, UserRepositoryInjectionToken } from "../ports/user.repository";
 

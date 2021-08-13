@@ -1,6 +1,7 @@
-import { ClientException } from "src/core/shared/exceptions/client.exception";
+// import { ClientException } from "src/core/shared/exceptions/client.exception";
 
 import { BaseEntity, BaseEntityConstructorParams } from "../../../shared/entities/base-entity.entity";
+import { ClientException } from "../../../shared/exceptions/client.exception";
 import { User } from "../../user/entities/user.entity";
 import { TodoItem } from "../bound-entities/todo-item/entities/todo-item.entity";
 

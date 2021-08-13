@@ -6,7 +6,7 @@ services:
     depends_on:
       - postgres
     ports:
-      - 8091:8080
+      - 8092:8080
 
   postgres:
     image: postgres:10-alpine

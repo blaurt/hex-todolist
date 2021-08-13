@@ -37,7 +37,7 @@
         "no-undef-init": "warn",
         "no-label-var": "error",
         "brace-style": "warn",
-        "quotes": ["warn", "double"],
+        "quotes": ["warn", "double", { "allowTemplateLiterals": true }],
         "radix": "error",
         "semi": ["error", "always"],
         "valid-typeof": ["warn"],
