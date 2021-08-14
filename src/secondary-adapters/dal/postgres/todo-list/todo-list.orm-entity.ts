@@ -26,4 +26,6 @@ export class TodoListEntity extends BaseTypeOrmEntity {
         referencedColumnName: "entity_id",
     })
     user: UserEntity;
+
+    user_id: UserEntity["entity_id"];
 }

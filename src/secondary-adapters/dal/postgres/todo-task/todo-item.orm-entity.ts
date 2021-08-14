@@ -1,27 +1,23 @@
-import { string } from "joi";
-import { TodoItem } from "src/core/components/todo-list/bound-entities/todo-item/entities/todo-item.entity";
+import { TodoTask } from "src/core/components/todo-list/bound-entities/todo-task/entities/todo-task.entity";
 import { Column, Entity, Index, JoinColumn, ManyToOne } from "typeorm";
 
 import { BaseTypeOrmEntity } from "../shared/base-typeorm-entity.orm-entity";
 import { TodoListEntity } from "../todo-list/todo-list.orm-entity";
 
-@Entity("todo_items")
-export class TodoItemEntity extends BaseTypeOrmEntity {
+@Entity("todo_tasks")
+export class TodoTaskEntity extends BaseTypeOrmEntity {
     @Index()
     @Column({ type: "varchar" })
-    title: TodoItem["title"];
+    title: TodoTask["title"];
 
     @Column({ type: "varchar" })
-    description: TodoItem["description"];
-
-    @Column({ type: "varchar" })
-    list_id: TodoItem["listId"];
+    description: TodoTask["description"];
 
     @Column({ type: "boolean" })
-    is_done: TodoItem["isDone"];
+    is_done: TodoTask["isDone"];
 
     @Column({ type: "boolean" })
-    is_private: TodoItem["isPrivate"];
+    is_private: TodoTask["isPrivate"];
 
     @ManyToOne(() => TodoListEntity)
     @JoinColumn({
@@ -29,5 +25,6 @@ export class TodoItemEntity extends BaseTypeOrmEntity {
         referencedColumnName: "entity_id",
     })
     todo_list: TodoListEntity;
-}
+
+    list_id: TodoTask["listId"];
 }

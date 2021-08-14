@@ -4,7 +4,7 @@ import { EntityMapper } from "src/shared/interfaces/entity-mapper.interface";
 
 import { TodoListEntity } from "./todo-list.orm-entity";
 
-// todo add builders
+// todo use npm change-case package
 // todo add support of items
 
 @injectable()
@@ -24,10 +24,12 @@ export class TodoListEntityMapper implements EntityMapper<TodoList, TodoListEnti
     }
 
     public toDomainEntity({ user_id, entity_id, created_at, updated_at, deleted_at, ...rest }: TodoListEntity): TodoList {
-        const list: TodoList = new TodoList({ entityId: entity_id });
-        Object.assign(list, {
-            ...rest,
+        const list: TodoList = new TodoList({
+            entityId: entity_id,
             userId: user_id,
+            ...rest,
+        });
+        Object.assign(list, {
             createdAt: created_at,
             updatedAt: updated_at,
             deletedAt: deleted_at,

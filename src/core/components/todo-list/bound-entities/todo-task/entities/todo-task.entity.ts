@@ -1,22 +1,22 @@
 import { BaseEntity, BaseEntityConstructorParams } from "../../../../../shared/entities/base-entity.entity";
 import { TodoList } from "../../../entities/todo-list.entity";
 
-export interface TodoItemConstructorParams {
-    title: TodoItem["title"];
-    description: TodoItem["description"];
-    isPrivate?: TodoItem["isPrivate"];
-    isDone?: TodoItem["isDone"];
-    listId: TodoItem["listId"];
+export interface TodoTaskConstructorParams {
+    title: TodoTask["title"];
+    description: TodoTask["description"];
+    isPrivate?: TodoTask["isPrivate"];
+    isDone?: TodoTask["isDone"];
+    listId: TodoTask["listId"];
 }
 
-export class TodoItem extends BaseEntity {
+export class TodoTask extends BaseEntity {
     public title: string;
     public description: string;
     public isDone: boolean;
     public listId: TodoList["entityId"];
     public isPrivate: boolean;
 
-    public constructor({ title, description, isPrivate, isDone, ...baseParams }: TodoItemConstructorParams & BaseEntityConstructorParams) {
+    public constructor({ title, description, isPrivate, isDone, ...baseParams }: TodoTaskConstructorParams & BaseEntityConstructorParams) {
         super(baseParams);
         this.title = title;
         this.description = description;

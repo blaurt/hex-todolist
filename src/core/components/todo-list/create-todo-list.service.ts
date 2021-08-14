@@ -1,18 +1,18 @@
 import { inject, injectable } from "inversify";
 
-import { TodoItem, TodoItemConstructorParams } from "./bound-entities/todo-item/entities/todo-item.entity";
+import { TodoTask,TodoTaskConstructorParams } from "./bound-entities/todo-task/entities/todo-task.entity";
 import { TodoList, TodoListConstructorParams } from "./entities/todo-list.entity";
 import { TodoListRepository, TodoListRepositoryInjectionToken } from "./ports/todo-list.repository";
 
 @injectable()
 export class CreateTodoListService {
     public constructor(@inject(TodoListRepositoryInjectionToken) private readonly todoListRepository: TodoListRepository) {}
-    public createList(todoListParams: TodoListConstructorParams, todoItems: Array<Omit<TodoItemConstructorParams, "listId">> = []) {
+    public createList(todoListParams: TodoListConstructorParams, todoTasks: Array<Omit<TodoTaskConstructorParams, "listId">> = []) {
         const newList = new TodoList(todoListParams);
 
-        newList.items = todoItems.map(
+        newList.items = todoTasks.map(
             (payload) =>
-                new TodoItem({
+                new TodoTask({
                     ...payload,
                     listId: newList.entityId,
                 }),

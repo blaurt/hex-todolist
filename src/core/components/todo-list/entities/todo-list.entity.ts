@@ -3,7 +3,7 @@
 import { BaseEntity, BaseEntityConstructorParams } from "../../../shared/entities/base-entity.entity";
 import { ClientException } from "../../../shared/exceptions/client.exception";
 import { User } from "../../user/entities/user.entity";
-import { TodoItem } from "../bound-entities/todo-item/entities/todo-item.entity";
+import { TodoTask } from "../bound-entities/todo-task/entities/todo-task.entity";
 
 export interface TodoListConstructorParams {
     title: TodoList["title"];
@@ -16,7 +16,7 @@ export interface TodoListConstructorParams {
 export class TodoList extends BaseEntity {
     public title: string;
     public description: string;
-    public items: TodoItem[] = [];
+    public items: TodoTask[] = [];
     public isDone: boolean;
     public isPrivate: boolean;
     public userId: User["entityId"];
