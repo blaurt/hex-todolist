@@ -5,5 +5,5 @@ export interface ResponseFormat<T = unknown> {
     error: ErrorDescriptor | null;
     path: string;
     timestamp: string;
-    metadata?: Record<string, unknown>;
+    metadata: Record<string, unknown> | null;
 }

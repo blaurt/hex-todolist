@@ -1,5 +1,5 @@
 import { inject, injectable } from "inversify";
-import { sign, SignOptions, verify } from "jsonwebtoken";
+import { decode, sign, SignOptions, verify } from "jsonwebtoken";
 import { promisify } from "util";
 
 import { ConfigService, ConfigServiceInjectionToken } from "../config/config.interface";
@@ -18,11 +18,15 @@ export class JsonWebTokenService implements JwtService {
         this.secret = this.config.get("jwt-secret");
     }
 
-    public async verify(token: string): Promise<Record<string, unknown>> {
-        return verifyAsync(token, this.secret);
+    public async sign(payload: Record<string, unknown>, expiresInSeconds: number = DEFAULT_EXPIRATION): Promise<string> {
+        return signAsync(payload, this.secret, { expiresIn: expiresInSeconds, });
     }
 
-    public async sign(payload: Record<string, unknown>, expiresInSeconds: number = DEFAULT_EXPIRATION): Promise<string> {
-        return signAsync(payload, this.secret, { expiresIn: expiresInSeconds });
+    public async verify<T extends Record<string, unknown>>(token: string): Promise<T> {
+        return verifyAsync(token, this.secret) as unknown as T;
+    }
+
+    public decode<T extends Record<string, unknown>>(token: string): T {
+        return decode(token) as T;
     }
 }

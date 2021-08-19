@@ -1,4 +1,5 @@
 import { ErrorDescriptor } from "src/shared/interfaces/error-descriptor.interface";
+
 import { ResponseFormat } from "./response-format.interface";
 import { ResponseFormatter } from "./response-formatter.interface";
 
@@ -13,10 +14,11 @@ export class JsonResponseFormatter<T> implements ResponseFormatter {
         };
     }
 
-    public formatError({message, details, path}: ErrorDescriptor & {path: string}): ResponseFormat<null> {
+    public formatError({ message, path, }: ErrorDescriptor & { path: string }): ResponseFormat<null> {
         return {
             data: null,
-            error: {message, details},
+            error: { message,
+                path, },
             timestamp: new Date().toISOString(),
             path,
             metadata: null,

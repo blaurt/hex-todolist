@@ -1,5 +1,3 @@
-// import { ClientException } from "src/core/shared/exceptions/client.exception";
-
 import { BaseEntity, BaseEntityConstructorParams } from "../../../shared/entities/base-entity.entity";
 import { ClientException } from "../../../shared/exceptions/client.exception";
 import { User } from "../../user/entities/user.entity";
@@ -13,28 +11,66 @@ export interface TodoListConstructorParams {
     userId: TodoList["userId"];
 }
 
+export const TodoListPublicFields: Readonly<Array<keyof TodoList>> = [
+    "title",
+    "description",
+    "isDone",
+    "entityId",
+    "tasks",
+    "createdAt",
+    "updatedAt",
+] as const;
+
 export class TodoList extends BaseEntity {
-    public title: string;
-    public description: string;
-    public items: TodoTask[] = [];
-    public isDone: boolean;
-    public isPrivate: boolean;
-    public userId: User["entityId"];
+    private _title: string;
+    private _description: string;
+    private _isDone: boolean;
+    private _isPrivate: boolean;
+    private _userId: User["entityId"];
+    private _tasks: TodoTask[] = [];
+
+    public get isPrivate(): boolean {
+        return this._isPrivate;
+    }
+
+    get title(): string {
+        return this._title;
+    }
+
+    get description(): string {
+        return this._description;
+    }
+
+    get isDone(): boolean {
+        return this._isDone;
+    }
+
+    get userId() {
+        return this._userId;
+    }
+
+    public get tasks(): TodoTask[] {
+        return this._tasks;
+    }
+
+    get isPublic() {
+        return !this.isPrivate;
+    }
 
     public constructor({ title, description, userId, isPrivate, isDone, ...baseParams }: TodoListConstructorParams & BaseEntityConstructorParams) {
         super(baseParams);
-        this.title = title;
-        this.description = description;
-        this.isPrivate = isPrivate ?? false;
-        this.isDone = isDone ?? false;
-        this.userId = userId;
+        this._title = title;
+        this._description = description;
+        this._isPrivate = isPrivate ?? false;
+        this._isDone = isDone ?? false;
+        this._userId = userId;
     }
 
     public markAsDone(): void {
-        if (this.items.some((item) => !item.isDone)) {
+        if (this.tasks.some((item) => !item.isDone)) {
             throw new ClientException("List contains unfinished items");
         }
 
-        this.isDone = true;
+        this._isDone = true;
     }
 }

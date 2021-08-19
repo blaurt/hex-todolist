@@ -13,7 +13,7 @@ export interface GetByIdOptions {
 export interface BaseRepository<T extends BaseEntity> {
     save(entity: T): Promise<T>;
     update(entityId: T["entityId"], payload: Partial<T>): Promise<T>;
-    getById(entityId: T["entityId"], options: GetByIdOptions): Promise<T | null>;
+    getById(entityId: T["entityId"], options?: GetByIdOptions): Promise<T | null>;
     getList<TGetListCondition = any>(cond: TGetListCondition, options?: GetListOptions): Promise<T[]>;
     delete(entityId: T["entityId"]): Promise<void>;
 }

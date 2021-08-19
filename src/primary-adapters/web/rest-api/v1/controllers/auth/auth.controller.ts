@@ -1,11 +1,9 @@
-import { Body, Controller, HttpCode, Inject, Post, UseFilters } from "@nestjs/common";
+import { Body, Controller, HttpCode, Post, UseFilters } from "@nestjs/common";
 
 import { SignInUseCase } from "../../../../../../use-cases/auth/sign-in/sign-in.use-case";
 import { SignUpUseCase } from "../../../../../../use-cases/auth/sign-up/sign-up.use-case";
 import { DomainExceptionsFilter } from "../../exception-filters/domain-exceptions.exception-filter";
-import { ResponseFormatter, ResponseFormatterInjectionToken } from "../../utils/response-formatters/response-formatter.interface";
 import { UserSignInResponse } from "./sign-in.response";
-import { UserSignUpResponse } from "./sign-up.response";
 
 @Controller("v1/auth")
 @UseFilters(new DomainExceptionsFilter())

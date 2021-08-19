@@ -1,8 +1,8 @@
 import { injectable } from "inversify";
-import { TodoTask } from "src/core/components/todo-list/entities/todo-task.entity";
+import { TodoTask } from "src/core/components/todo-list/bound-entities/todo-task/entities/todo-task.entity";
 import { EntityMapper } from "src/shared/interfaces/entity-mapper.interface";
 
-import { TodoTaskEntity } from "./todo-task.orm-entity";
+import { TodoTaskEntity } from "./todo-item.orm-entity";
 
 // todo add builders
 
@@ -23,13 +23,11 @@ export class TodoTaskEntityMapper implements EntityMapper<TodoTask, TodoTaskEnti
     }
 
     public toDomainEntity({ list_id, entity_id, created_at, updated_at, deleted_at, ...rest }: TodoTaskEntity): TodoTask {
-        const list: TodoTask = new TodoTask({ entityId: entity_id });
-        Object.assign(list, {
-            ...rest,
+        const list: TodoTask = new TodoTask({
+            entityId: entity_id,
             listId: list_id,
-            createdAt: created_at,
-            updatedAt: updated_at,
-            deletedAt: deleted_at,
+
+            ...rest,
         });
 
         return list;

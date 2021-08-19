@@ -1,6 +1,15 @@
 export interface JwtService {
     sign(payload: Record<string, unknown>, expiresIn?: number): Promise<string>;
-    verify(token: string): Promise<Record<string, unknown>>;
+
+    /**
+     * Verifies token, and returns its payload
+     */
+    verify<T extends Record<string, unknown>>(token: string): Promise<T>;
+
+    /**
+     * Same as verify, but doesn't perform verification
+     */
+    decode<T extends Record<string, unknown>>(token: string): T;
 }
 
 export const JwtServiceInjectionToken = Symbol("JwtService");

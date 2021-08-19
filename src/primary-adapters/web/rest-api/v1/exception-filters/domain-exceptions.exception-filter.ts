@@ -24,10 +24,13 @@ export class DomainExceptionsFilter implements ExceptionFilter {
         const request = ctx.getRequest();
 
         const httpException = this.getHttpException(exception);
-        const { message, details } = httpException.getResponse() as ErrorDescriptor;
+
+        // todo re-check exception payload
+        const { message, path, } = httpException.getResponse() as ErrorDescriptor;
         const responsePayload: ResponseFormat<null> = {
             data: null,
-            error: { message, details },
+            error: { message,
+                path, },
             timestamp: new Date().toISOString(),
             path: request.url,
             metadata: {},

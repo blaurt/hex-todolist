@@ -24,7 +24,8 @@ export class AllExceptionsFilter implements ExceptionFilter {
 
         const responsePayload: ResponseFormat<null> = {
             data: null,
-            error: { message: "Something went wrong", details: [] },
+            error: { message: "Something went wrong",
+                path: [], },
             timestamp: new Date().toISOString(),
             path: request.url,
             metadata: {},

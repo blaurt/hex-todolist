@@ -23,4 +23,8 @@ export class TodoTask extends BaseEntity {
         this.isPrivate = isPrivate ?? false;
         this.isDone = isDone ?? false;
     }
+
+    get isPublic() {
+        return !this.isPrivate;
+    }
 }

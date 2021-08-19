@@ -38,10 +38,10 @@ implements BaseRepository<TDomainEntity> {
         entityId: BaseEntity["entityId"],
         { includeDeleted }: GetByIdOptions = { includeDeleted: false },
     ): Promise<TDomainEntity | null> {
-        const condition: FindConditions<TOrmEntity> = { entity_id: entityId,
+        const condition = { entity_id: entityId,
             deleted_at: IsNull() };
         if (includeDeleted) {
-            delete (condition as any).deleted_at;
+            delete (condition as unknown as FindConditions<TOrmEntity>).deleted_at;
         }
 
         const ormEntity = await this.baseRepo.findOne({ where: condition });

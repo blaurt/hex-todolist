@@ -1,25 +1,31 @@
 import { injectable } from "inversify";
 import { ValidationError } from "joi";
 import { InvalidArgumentException } from "src/core/shared/exceptions/validation.exception";
+import { SchemaNotDefinedException } from "src/secondary-adapters/exceptions/schema-not-defined.exception";
+import { ErrorDescriptor } from "src/shared/interfaces/error-descriptor.interface";
 
-const DEFAULT_USE_CASE_CONFIG = {
+const DEFAULT_USE_CASE_CONFIG: Required<UseCaseProps> = {
     shouldValidate: true,
     shouldTrimSensitiveData: true,
     customDataTrimmer: (x: unknown) => x,
 } as const;
 
-export type UseCaseProps = Partial<typeof DEFAULT_USE_CASE_CONFIG>;
+export interface UseCaseProps {
+    shouldValidate?: boolean;
+    shouldTrimSensitiveData?: boolean;
+    customDataTrimmer?: (x: unknown) => unknown;
+}
 
 export interface ValidationSchema<T> {
     validateAsync: (value: any, options: { abortEarly: boolean }) => Promise<T>;
 }
 
 @injectable()
-export abstract class BaseUseCase<TInput = unknown, TResult = void> {
+export abstract class BaseUseCase<TInput extends unknown, TResult = void> {
+    protected readonly validationSchema: ValidationSchema<TInput> | null;
+
     private readonly shouldValidate: boolean;
     private readonly shouldTrimResult: boolean;
-
-    protected abstract readonly validationSchema: ValidationSchema<TInput>;
 
     public constructor(props: UseCaseProps = DEFAULT_USE_CASE_CONFIG) {
         this.shouldValidate = props.shouldValidate ?? DEFAULT_USE_CASE_CONFIG.shouldValidate;
@@ -43,16 +49,23 @@ export abstract class BaseUseCase<TInput = unknown, TResult = void> {
         try {
             await this.validate(payload);
         } catch (error) {
-            throw new InvalidArgumentException({ errors: this.extractErrorMessages(error) });
+            throw new InvalidArgumentException({ errors: this.extractErrorMessages(error), });
         }
     }
 
-    protected extractErrorMessages(error: ValidationError): string[] {
-        return error.details.map(({ message }) => message);
+    protected extractErrorMessages(error: ValidationError): ErrorDescriptor[] {
+        return error.details.map(({ message, path, }) => ({
+            path,
+            message,
+        }));
     }
 
     protected async validate(data: TInput): Promise<void> {
-        await this.validationSchema.validateAsync(data, { abortEarly: true });
+        if (this.validationSchema) {
+            await this.validationSchema.validateAsync(data, { abortEarly: true, });
+        } else {
+            throw new SchemaNotDefinedException();
+        }
     }
 
     protected abstract trimResultData(data: unknown): TResult;

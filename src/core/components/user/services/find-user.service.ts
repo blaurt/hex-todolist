@@ -11,7 +11,7 @@ export class FindUserService {
     public async findByUsername(username: User["login"]): Promise<User> {
         const user = await this.repository.findByUsername(username);
         if (!user) {
-            throw new EntityNotFoundException("User was not found");
+            throw new EntityNotFoundException({ message: "User was not found", });
         }
 
         return user;

@@ -1,19 +1,26 @@
-import { DomainBaseException } from "./domain-base.exception";
+import { ErrorDescriptor } from "src/shared/interfaces/error-descriptor.interface";
+
 import { ClientException } from "./client.exception";
+import { DomainBaseException } from "./domain-base.exception";
 
 interface Params {
     message?: string;
-    errors?: string[];
+    errors?: ErrorDescriptor[];
 }
 
-const DEFAULT_PARAMS: Params = { message: "Validation error", errors: [] };
+const DEFAULT_PARAMS: Params = {
+    message: "Validation error",
+    errors: [],
+};
 
 export class InvalidArgumentException extends ClientException {
-    private readonly _errors: string[] = [];
+    private readonly _errors: ErrorDescriptor[] = [];
 
-    public constructor({ errors, message }: Params) {
+    public constructor({ errors, message, }: Params) {
         super(message ?? DEFAULT_PARAMS.message);
-        this._errors = errors ?? DEFAULT_PARAMS.errors;
+        if (errors) {
+            this._errors = errors;
+        }
     }
 
     get errors() {

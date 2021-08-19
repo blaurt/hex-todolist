@@ -5,7 +5,7 @@ import { EntityMapper } from "src/shared/interfaces/entity-mapper.interface";
 import { TodoListEntity } from "./todo-list.orm-entity";
 
 // todo use npm change-case package
-// todo add support of items
+// todo add support of tasks
 
 @injectable()
 export class TodoListEntityMapper implements EntityMapper<TodoList, TodoListEntity> {

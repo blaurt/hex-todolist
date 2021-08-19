@@ -8,7 +8,7 @@ export class FindTodoTasksService {
     public constructor(@inject(TodoTaskRepositoryInjectionToken) private readonly repository: TodoTaskRepository) {}
 
     public async findItemsByTodoListId(listId: TodoTask["listId"]): Promise<TodoTask[]> {
-        const items = await this.repository.getList({ where: { listId } }, { includeDeleted: false });
+        const items = await this.repository.getList({ where: { listId, }, }, { includeDeleted: false, });
 
         return items;
     }
