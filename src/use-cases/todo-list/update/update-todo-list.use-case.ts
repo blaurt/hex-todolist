@@ -7,7 +7,7 @@ import { AccessDeniedException } from "src/core/shared/exceptions/access-denied.
 import { EntityNotFoundException } from "src/core/shared/exceptions/entity-not-found.exception";
 import { BaseUseCase, ValidationSchema } from "src/use-cases/base.use-case";
 
-import { UpdateTodoListValidationSchema } from "./update.validation-schema";
+import { UpdateTodoListValidationSchema } from "./update-todo-list.validation-schema";
 
 interface Input {
     listId: TodoList["entityId"];

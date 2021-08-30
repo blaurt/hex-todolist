@@ -15,7 +15,7 @@ export class JsonWebTokenService implements JwtService {
     private readonly secret: string;
 
     public constructor(@inject(ConfigServiceInjectionToken) private readonly config: ConfigService) {
-        this.secret = this.config.get("jwt-secret");
+        this.secret = this.config.get("jwtSecret");
     }
 
     public async sign(payload: Record<string, unknown>, expiresInSeconds: number = DEFAULT_EXPIRATION): Promise<string> {

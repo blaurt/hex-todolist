@@ -7,16 +7,16 @@ import { TodoListEntity } from "../todo-list/todo-list.orm-entity";
 @Entity("todo_tasks")
 export class TodoTaskEntity extends BaseTypeOrmEntity {
     @Index()
-    @Column({ type: "varchar" })
+    @Column({ type: "varchar", })
     title: TodoTask["title"];
 
-    @Column({ type: "varchar" })
+    @Column({ type: "varchar", })
     description: TodoTask["description"];
 
-    @Column({ type: "boolean" })
+    @Column({ type: "boolean", })
     is_done: TodoTask["isDone"];
 
-    @Column({ type: "boolean" })
+    @Column({ type: "boolean", })
     is_private: TodoTask["isPrivate"];
 
     @ManyToOne(() => TodoListEntity)

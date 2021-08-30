@@ -1,7 +1,10 @@
+import "reflect-metadata";
+
 import { appConfig } from "./configuration/app.config";
 import { appInitializer } from "./lib/app-initilizer";
-import { logger } from "./lib/logger";
+import { DIContainer } from "./lib/di-container";
 import { bootstrap } from "./nest-js.bootrsrap";
+import { Logger, LoggerInjectionToken } from "./secondary-adapters/services/logger/interfaces/logger.interface";
 
 class Server {
     private readonly port: number;
@@ -11,11 +14,14 @@ class Server {
     }
 
     public async runServer(): Promise<void> {
+        let logger: Logger;
         try {
             await appInitializer.initialize();
+            logger = DIContainer.getInstance().get<Logger>(LoggerInjectionToken);
             bootstrap(this.port);
         } catch (error) {
-            logger.error(error);
+            logger = DIContainer.getInstance().get<Logger>(LoggerInjectionToken);
+            logger.error(error.message, error.stack);
             // TODO: Graceful shutdown
         }
     }

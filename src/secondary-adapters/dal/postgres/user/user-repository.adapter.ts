@@ -17,24 +17,8 @@ export class UserRepositoryPgAdapter extends BaseTypeOrmRepository<User, UserEnt
         return [];
     }
 
-    // public async save(entity: User): Promise<User> {
-    //     const mappedData = UserEntity.fromDomainObject(entity);
-    //     const savedEntity = await this.baseRepo.save(mappedData);
-
-    //     return UserEntity.toDomainEntity(savedEntity);
-    // }
-
-    // public async getById(id: User["entityId"]): Promise<User | null> {
-    //     const ormEntity = await this.baseRepo.findOne({ where: { id } });
-    //     if (ormEntity) {
-    //         return UserEntity.toDomainEntity(ormEntity);
-    //     }
-
-    //     return null;
-    // }
-
     public async findByUsername(username: string): Promise<User | null> {
-        const ormEntity = await this.baseRepo.findOne({ where: { login: username } });
+        const ormEntity = await this.baseRepo.findOne({ where: { login: username, }, });
         if (ormEntity) {
             return UserEntity.toDomainEntity(ormEntity);
         }

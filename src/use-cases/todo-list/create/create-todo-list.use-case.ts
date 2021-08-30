@@ -4,7 +4,7 @@ import { TodoList, TodoListPublicFields } from "src/core/components/todo-list/en
 import { CreateTodoListService } from "src/core/components/todo-list/services/create-todo-list.service";
 import { BaseUseCase, ValidationSchema } from "src/use-cases/base.use-case";
 
-import { CreateTodoListValidationSchema } from "./create.validation-schema";
+import { CreateTodoListValidationSchema } from "./create-todo-list.validation-schema";
 
 interface Input {
     title: string;

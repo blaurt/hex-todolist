@@ -10,14 +10,15 @@ import { TodoListEntity } from "./todo-list.orm-entity";
 
 @injectable()
 export class TodoListRepositoryPgAdapter extends BaseTypeOrmRepository<TodoList, TodoListEntity> implements TodoListRepository {
+    ormEntityClass = TodoListEntity;
     public constructor(@inject(TodoListEntityMapper) mapper: TodoListEntityMapper) {
         super(TodoListEntity, mapper);
     }
 
-    public async getUserLists(userId: User["entityId"], { includeDeleted } = { includeDeleted: false }): Promise<TodoList[]> {
+    public async getUserLists(userId: User["entityId"], { includeDeleted, } = { includeDeleted: false, }): Promise<TodoList[]> {
         let lists: TodoListEntity[];
         if (includeDeleted) {
-            lists = await this.baseRepo.find({ user_id: userId });
+            lists = await this.baseRepo.find({ user_id: userId, });
         } else {
             lists = await this.baseRepo.find({
                 user_id: userId,

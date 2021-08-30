@@ -4,6 +4,7 @@ import * as path from "path";
 
 import { appConfig } from "../configuration/app.config";
 
+// todo rename to IoCcontainer
 export class DIContainer {
     private static instance: Container;
 

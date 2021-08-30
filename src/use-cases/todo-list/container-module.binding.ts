@@ -1,9 +1,9 @@
 import { ContainerModule } from "inversify";
 
-import { CreateTodoListUseCase } from "./create/create.use-case";
-import { DeleteTodoListUseCase } from "./delete/delete.use-case";
-import { GetTodoListUseCase } from "./get/get.use-case";
-import { UpdateTodoListUseCase } from "./update/update.use-case";
+import { CreateTodoListUseCase } from "./create/create-todo-list.use-case";
+import { DeleteTodoListUseCase } from "./delete/delete-todo-list.use-case";
+import { GetTodoListUseCase } from "./get/get-user-todo-lists.use-case";
+import { UpdateTodoListUseCase } from "./update/update-todo-list.use-case";
 
 export default new ContainerModule((bind) => {
     bind(CreateTodoListUseCase).toSelf();

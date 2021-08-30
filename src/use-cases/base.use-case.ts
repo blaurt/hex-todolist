@@ -32,14 +32,14 @@ export abstract class BaseUseCase<TInput extends unknown, TResult = void> {
         this.shouldTrimResult = props.shouldTrimSensitiveData ?? DEFAULT_USE_CASE_CONFIG.shouldTrimSensitiveData;
     }
 
-    public async execute(payload: TInput): Promise<TResult> {
+    public async execute<TExpected = TResult>(payload: TInput): Promise<TExpected> {
         if (this.shouldValidate) {
             await this.handleValidation(payload);
         }
 
         const data = await this.handleRequest(payload);
         if (this.shouldTrimResult) {
-            return this.trimResultData(data);
+            return this.trimResultData(data) as unknown as TExpected;
         }
 
         return data;
@@ -68,6 +68,10 @@ export abstract class BaseUseCase<TInput extends unknown, TResult = void> {
         }
     }
 
-    protected abstract trimResultData(data: unknown): TResult;
+    // todo refactor type any
+    protected trimResultData(data: any): TResult {
+        return data;
+    }
+
     protected abstract handleRequest(payload: unknown): any;
 }

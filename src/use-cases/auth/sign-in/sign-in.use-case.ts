@@ -20,10 +20,10 @@ interface Input {
     email: string;
 }
 
-type Result = Pick<User, typeof PublicFields[number]> & { access_token: string };
+export type SignInUseCaseResult = Pick<User, typeof PublicFields[number]> & { access_token: string };
 
 @injectable()
-export class SignInUseCase extends BaseUseCase<Input, Result> {
+export class SignInUseCase extends BaseUseCase<Input, SignInUseCaseResult> {
     public constructor(
         @inject(FindUserService) private readonly userService: FindUserService,
         @inject(JwtServiceInjectionToken) private readonly jwtService: JwtService,
@@ -31,12 +31,12 @@ export class SignInUseCase extends BaseUseCase<Input, Result> {
         super();
     }
 
-    protected async validate({ login, password }: Pick<User, "login"> & { password: string }): Promise<void> {
+    protected async validate({ login, password, }: Pick<User, "login"> & { password: string }): Promise<void> {
         await SignInValidationSchema.validateAsync({ login,
-            password });
+            password, });
     }
 
-    protected async handleRequest({ login, password }) {
+    protected async handleRequest({ login, password, }) {
         const user = await this.userService.findByUsername(login);
         if (!user) {
             throw new DomainBaseException("User not found");
@@ -47,7 +47,7 @@ export class SignInUseCase extends BaseUseCase<Input, Result> {
             throw new DomainBaseException("Invalid password");
         }
 
-        const token = await this.jwtService.sign({ userId: user.entityId });
+        const token = await this.jwtService.sign({ userId: user.entityId, });
 
         return {
             ...user,
@@ -55,7 +55,7 @@ export class SignInUseCase extends BaseUseCase<Input, Result> {
         };
     }
 
-    protected trimResultData(data: User & { access_token: string }): Result {
+    protected trimResultData(data: User & { access_token: string }): SignInUseCaseResult {
         return {
             ...pick<User, typeof PublicFields[number]>(data, PublicFields),
             access_token: data.access_token,

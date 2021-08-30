@@ -1,4 +1,5 @@
 import { inject, injectable } from "inversify";
+import { JwtService, JwtServiceInjectionToken } from "src/secondary-adapters/services/jwt/jwt-service.interface";
 
 import { UserBuilder, UserBuilderInjectionToken } from "../builders/user.builder";
 import { UserBuilderParams } from "../builders/user-builder-params.interface";
@@ -13,24 +14,33 @@ export class CreateUserService {
         @inject(UserBuilderInjectionToken) private readonly builder: UserBuilder,
     ) {}
 
-    public async createUser(input: UserBuilderParams): Promise<User> {
-        const existingUser = await this.repository.getList({
-            where: [
-                { login: input.login },
-                { email: input.email },
-            ],
-        });
+    public async createUser({ email, login, password, }: UserBuilderParams): Promise<User> {
+        const doesUserExist = await this.checkIfCredentialsClaimed(login, email);
 
         // todo refactor msg
-        if (existingUser) {
+        if (doesUserExist) {
             throw new DuplicateUserException("Username or email is already in use");
         }
 
-        const newUser = await this.builder.fromInput(input);
-        console.log("🚀 ~ file: create-user.service.ts ~ line 20 ~ CreateUserService ~ createUser ~ newUser", newUser);
+        const newUser = await this.builder.fromInput({
+            email,
+            login,
+            password,
+        });
 
         const user = await this.repository.save(newUser);
 
         return user;
+    }
+
+    private async checkIfCredentialsClaimed(login: User["login"], email: User["email"]): Promise<boolean> {
+        const results = await this.repository.getList({
+            where: [
+                { login, },
+                { email, },
+            ],
+        });
+
+        return results.length > 0;
     }
 }

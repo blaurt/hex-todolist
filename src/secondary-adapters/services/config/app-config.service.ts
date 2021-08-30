@@ -7,7 +7,7 @@ import { ConfigKeys, ConfigService } from "./config.interface";
 type ConfigMap = Map<ConfigKeys, typeof appConfig[ConfigKeys]>;
 
 @injectable()
-export class AppConfig implements ConfigService {
+export class AppConfigService implements ConfigService {
     private readonly values: ConfigMap;
 
     public constructor() {

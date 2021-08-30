@@ -27,12 +27,10 @@ export class TodoListEntityMapper implements EntityMapper<TodoList, TodoListEnti
         const list: TodoList = new TodoList({
             entityId: entity_id,
             userId: user_id,
-            ...rest,
-        });
-        Object.assign(list, {
             createdAt: created_at,
             updatedAt: updated_at,
             deletedAt: deleted_at,
+            ...rest,
         });
 
         return list;

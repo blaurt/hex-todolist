@@ -2,7 +2,7 @@ import { injectable } from "inversify";
 import { TodoTask } from "src/core/components/todo-list/bound-entities/todo-task/entities/todo-task.entity";
 import { EntityMapper } from "src/shared/interfaces/entity-mapper.interface";
 
-import { TodoTaskEntity } from "./todo-item.orm-entity";
+import { TodoTaskEntity } from "./todo-task.orm-entity";
 
 // todo add builders
 
