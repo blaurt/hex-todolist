@@ -1,9 +1,12 @@
 import { Controller, Get, Res } from "@nestjs/common";
 import { Response } from "express";
+import { DIContainer } from "src/lib/di-container";
+import { Logger, LoggerInjectionToken } from "src/secondary-adapters/services/logger/interfaces/logger.interface";
 
 @Controller([
     "v1/health",
     "v1/healthcheck",
+    "v1/health-check",
 ])
 export class HealthCheckController {
     @Get("/")

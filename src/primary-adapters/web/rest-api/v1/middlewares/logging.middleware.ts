@@ -15,24 +15,22 @@ export class AppLoggerMiddleware implements NestMiddleware {
     }
 
     public use(request: Request, response: Response, next: NextFunction): void {
-        console.log("🚀 ~ file: logging.middleware.ts ~ line 11 ~ AppLoggerMiddleware");
-
-        const { method, path, headers, body, query, } = request;
+        const { method, path, headers, body: requestBody, query, } = request;
 
         this.logger.logRequest({
             method,
             path,
             headers,
-            body,
+            body: requestBody,
             query,
         });
 
-        response.on("close", () => {
-            // const { statusCode, body  } = response;
-            console.log("🚀 ~ file: logging.middleware.ts ~ line 30 ~ AppLoggerMiddleware ~ response.on ~ response", response);
-            // const contentLength = response.get("content-length");
-            // this.logger.logResponse(statusCode, res  );
-        });
+        // response.on("finish", () => {
+        //     const { statusCode, } = response;
+        //     console.log("🚀 ~ file: logging.middleware.ts ~ line 30 ~ AppLoggerMiddleware ~ response.on ~ response", response);
+        //     const contentLength = response.get("content-length");
+        //     this.logger.logResponse(statusCode, {}, {});
+        // });
 
         next();
     }

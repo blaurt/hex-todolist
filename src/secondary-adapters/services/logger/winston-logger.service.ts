@@ -1,10 +1,7 @@
+import { AsyncLocalStorage } from "async_hooks";
 import { inject, injectable } from "inversify";
-import * as pino from "pino";
-import { Logger as PinoLogger, LoggerOptions } from "pino";
-import { ConfigService, ConfigServiceInjectionToken } from "src/secondary-adapters/services/config/config.interface";
+import * as winston from "winston";
 
-import { AppConfig, appConfig, NODE_ENV } from "../../../configuration/app.config";
-import { AsyncStorage, AsyncStorageInjectionToken } from "../async-storage/async-storage.interface";
 import { ALS_TOKEN } from "./als";
 import { BaseLogMessageProps } from "./interfaces/base-log-message-props.interface";
 import { HttpLogger } from "./interfaces/http-logger.interface";
@@ -13,31 +10,42 @@ import { LogRequestParams } from "./interfaces/log-request-params.interface";
 import { RequestInfo } from "./interfaces/request-info.interface";
 import { ResponseInfo } from "./interfaces/response-info.interface";
 
-// todo consider adding formatting strategy to support JSON / CEF / etc formats
-
 @injectable()
-export class PinoLoggerService implements HttpLogger {
-    private readonly logger: PinoLogger;
+export class WinstonLoggerService implements HttpLogger {
+    private readonly logger: winston.Logger;
 
-    public constructor(
-        @inject(ConfigServiceInjectionToken) private readonly configService: ConfigService,
-        @inject(ALS_TOKEN) private readonly asyncStorage: any,
-    ) {
-        const loggerOptions: LoggerOptions = {
-            level: this.configService.get<AppConfig["logger"]>("logger").level,
-        };
+    public constructor(@inject(ALS_TOKEN) private readonly asyncStorage: AsyncLocalStorage<any>) {
+        this.logger = winston.createLogger({
+            level: LOG_LEVEL.INFO,
+            format: winston.format.json(),
+            defaultMeta: {},
+            transports: [
+                //
+                // - Write all logs with level `error` and below to `error.log`
+                // - Write all logs with level `info` and below to `combined.log`
+                //
+                new winston.transports.File({ filename: "error.log",
+                    level: "error", }),
+                new winston.transports.File({ filename: "combined.log", }),
+            ],
+        });
 
-        if (appConfig.nodeEnv === NODE_ENV.LOCAL) {
-            loggerOptions.prettyPrint = {
-                colorize: true,
-            };
+        //
+        // If we're not in production then log to the `console` with the format:
+        // `${info.level}: ${info.message} JSON.stringify({ ...rest }) `
+        //
+
+        if (process.env.NODE_ENV !== "production") {
+            this.logger.add(
+                new winston.transports.Console({
+                    format: winston.format.simple(),
+                }),
+            );
         }
-
-        this.logger = pino(loggerOptions);
     }
 
     public fatal(msg: string, args: Record<string, unknown>) {
-        this.logger.fatal(msg, this.getTraceId());
+        this.logger.crit(msg, this.getTraceId());
     }
 
     public error(msg: string, args: Record<string, unknown>) {
@@ -49,22 +57,16 @@ export class PinoLoggerService implements HttpLogger {
     }
 
     public info(msg: string, args: Record<string, unknown>) {
-        console.log("🚀 ~ file: pino-logger.service.ts ~ line 53 ~ PinoLoggerService ~ info ~ msg", msg);
-        console.log("this.getTraceId()", this.getTraceId());
-
         this.logger.info(msg, { traceId: this.getTraceId(), });
     }
 
     public debug(msg: string, args: Record<string, unknown>) {
-        console.log("debug called");
-        // pino().info("asdfsdf");
-        // this.logger.info(msg, this.getTraceId());
-        console.log("debug ended");
+        this.logger.debug(msg, this.getTraceId());
     }
 
     public logRequest({ method, path, headers, query, body, }: LogRequestParams) {
-        const payload: RequestInfo = {
-            ...this.composeBaseLogData(LOG_LEVEL.DEBUG),
+        const payload = {
+            ...this.composeBaseLogData(LOG_LEVEL.INFO, "Request data"),
             logMessage: "Request data",
             method,
             path,
@@ -73,7 +75,7 @@ export class PinoLoggerService implements HttpLogger {
             body,
         };
 
-        this.logger.debug(payload);
+        this.logger.info(payload);
     }
 
     public logResponse(
@@ -82,14 +84,14 @@ export class PinoLoggerService implements HttpLogger {
         responseHeaders: ResponseInfo["responseHeaders"],
     ) {
         const payload: ResponseInfo = {
-            ...this.composeBaseLogData(LOG_LEVEL.DEBUG),
+            ...this.composeBaseLogData(LOG_LEVEL.INFO),
             message: "Response data",
             responseCode,
             responseHeaders,
             responseBody,
         };
 
-        this.logger.debug(payload);
+        this.logger.info(payload);
     }
 
     private composeBaseLogData(level: LOG_LEVEL, message: BaseLogMessageProps["message"] = "message_not_set"): BaseLogMessageProps {

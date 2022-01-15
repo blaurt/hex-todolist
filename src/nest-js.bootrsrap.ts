@@ -5,11 +5,11 @@ import { NestExpressApplication } from "@nestjs/platform-express";
 
 import { AppModule } from "./app.module";
 import { AuthMiddleware } from "./primary-adapters/web/rest-api/v1/middlewares/auth.middleware";
-import { TraceIdMiddlware } from "./primary-adapters/web/rest-api/v1/middlewares/trace-id.middleware";
+import { TraceIdMiddleware } from "./primary-adapters/web/rest-api/v1/middlewares/trace-id.middleware";
 
 export async function bootstrap(port: number) {
     const app = await NestFactory.create<NestExpressApplication>(AppModule);
-    app.use(TraceIdMiddlware);
+    app.use(TraceIdMiddleware);
     app.use(AuthMiddleware);
 
     const server = await app.listen(port);

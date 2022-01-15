@@ -6,6 +6,9 @@ import { AppBaseException } from "src/core/shared/exceptions/app-base.exception"
 import { AsyncStorage } from "./async-storage.interface";
 import { AsyncStore } from "./async-store.interface";
 
+/**
+ * Temporally unused due to getStore issues
+ */
 @injectable()
 export class NodeAsyncStorageService implements AsyncStorage {
     private static asyncStore: AsyncLocalStorage<Map<string, string>>;
@@ -15,21 +18,16 @@ export class NodeAsyncStorageService implements AsyncStorage {
         NodeAsyncStorageService.asyncStore = new AsyncLocalStorage<Map<string, string>>();
     }
 
-    private static getInitialStore() {
+    static getInitialStore() {
         return new Map();
     }
 
-    public bindToAsyncContext(next: () => void): void {
-        if (NodeAsyncStorageService.isBoundedToContext) {
-            throw new AppBaseException("Async storage can be binded to context only once");
-        }
+    public bindToAsyncContext(next: () => any): void {
+        const asyncStorage = NodeAsyncStorageService.asyncStore; // app.get(ASYNC_STORAGE);
+        this.set("traceId", nanoid());
 
-        NodeAsyncStorageService.asyncStore.run(NodeAsyncStorageService.getInitialStore(), () => {
-            NodeAsyncStorageService.isBoundedToContext = true;
-
+        asyncStorage.run(NodeAsyncStorageService.getInitialStore(), () => {
             next();
-            this.set("traceId", nanoid());
-
         });
     }
 
@@ -42,15 +40,12 @@ export class NodeAsyncStorageService implements AsyncStorage {
     }
 
     private getStore(): Map<string, string> {
-        const store = NodeAsyncStorageService.asyncStore.getStore();
-        console.log(
-            "🚀 ~ file: node-async-storage.service.ts ~ line 45 ~ NodeAsyncStorageService ~ getStore ~ NodeAsyncStorageService.asyncStore",
-            NodeAsyncStorageService.asyncStore,
-        );
+        const store = NodeAsyncStorageService.asyncStore;
+
         if (!store) {
             throw new AppBaseException("Async store is undefined. Ensure you use it inside of async context");
         }
 
-        return store;
+        return store as any;
     }
 }

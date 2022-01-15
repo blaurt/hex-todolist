@@ -24,7 +24,7 @@ export const appConfig: AppConfig = {
     port: 4000,
     nodeEnv: (process.env.NODE_ENV || NODE_ENV.LOCAL) as NODE_ENV, // todo type list of available environments
     logger: {
-        level: LOG_LEVEL.WARN,
+        level: LOG_LEVEL.INFO,
     },
     jwtSecret: "secret_key_here",
     diContainerModulesPath: [

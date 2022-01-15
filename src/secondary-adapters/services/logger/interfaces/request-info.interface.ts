@@ -4,7 +4,7 @@ import { SUPPORTED_HTTP_METHODS } from "src/shared/types/supported-http-methods.
 import { BaseLogMessageProps } from "./base-log-message-props.interface";
 
 export interface RequestInfo extends BaseLogMessageProps {
-    message: "Request data";
+    logMessage: "Request data";
     method: SUPPORTED_HTTP_METHODS | string;
     path: string;
     query: ParsedQs;
