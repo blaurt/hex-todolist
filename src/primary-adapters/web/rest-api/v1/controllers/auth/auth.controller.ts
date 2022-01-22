@@ -1,4 +1,5 @@
-import { Body, Controller, HttpCode, Post, UseFilters } from "@nestjs/common";
+import { Body, Controller, HttpCode, HttpStatus, Post, UseFilters } from "@nestjs/common";
+import { StatusCodes } from "http-status-codes";
 
 import { SignInUseCase, SignInUseCaseResult } from "../../../../../../use-cases/auth/sign-in/sign-in.use-case";
 import { SignUpUseCase, SignUpUseCaseResult } from "../../../../../../use-cases/auth/sign-up/sign-up.use-case";
@@ -11,19 +12,16 @@ export class AuthController {
     public constructor(private readonly signUpUseCase: SignUpUseCase, private readonly signInUseCase: SignInUseCase) {}
 
     @Post("/signup")
+    @HttpCode(StatusCodes.CREATED)
     public async signup(@Body() input): Promise<unknown> {
-        console.log("🚀 ~ file: user.controller.ts ~ line 13 ~ UserController ~ signup ~ input", input);
-
         const response = await this.signUpUseCase.execute<SignUpUseCaseResult>(input);
 
         return response;
     }
 
     @Post("/signin")
-    @HttpCode(200)
+    @HttpCode(StatusCodes.OK)
     public async signin(@Body() input): Promise<UserSignInResponse> {
-        console.log("🚀 ~ file: auth.controller.ts ~ line 1 ~ AuthController ~ signin ~ this.signInUseCase", this.signInUseCase);
-
         const payload = await this.signInUseCase.execute<SignInUseCaseResult>(input);
 
         return payload;

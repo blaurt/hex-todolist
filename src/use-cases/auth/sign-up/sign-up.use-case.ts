@@ -59,7 +59,6 @@ export class SignUpUseCase extends BaseUseCase<Input, SignUpUseCaseResult> {
         );
 
         const refreshToken = await this.jwtService.sign({ userId: user.entityId, }, _1month);
-        console.log("🚀 ~ file: sign-up.use-case.ts ~ line 95 ~ SignUpUseCase ~ handleRequest ~ user11111111111", user.entityId);
 
         return {
             id: user.entityId,

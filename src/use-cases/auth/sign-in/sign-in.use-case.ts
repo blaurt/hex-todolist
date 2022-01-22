@@ -20,7 +20,7 @@ interface Input {
     email: string;
 }
 
-export type SignInUseCaseResult = Pick<User, typeof PublicFields[number]> & { access_token: string };
+export type SignInUseCaseResult = Pick<User, typeof PublicFields[number]> & { accessToken: string };
 
 @injectable()
 export class SignInUseCase extends BaseUseCase<Input, SignInUseCaseResult> {
@@ -58,7 +58,7 @@ export class SignInUseCase extends BaseUseCase<Input, SignInUseCaseResult> {
     protected trimResultData(data: User & { access_token: string }): SignInUseCaseResult {
         return {
             ...pick<User, typeof PublicFields[number]>(data, PublicFields),
-            access_token: data.access_token,
+            accessToken: data.access_token,
         };
     }
 }

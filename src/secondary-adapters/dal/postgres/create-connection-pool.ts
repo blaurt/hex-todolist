@@ -1,21 +1,26 @@
 import { join } from "path";
 import { Connection, createConnection, getConnectionOptions } from "typeorm";
 
+import { ConfigFactoryService } from "./config/config-providers/config-factory";
+
+let connection: Connection;
+
 export async function createConnectionPool(): Promise<Connection> {
-    const connectionOptions = await getConnectionOptions();
+    if (connection) {
+        return connection;
+    }
+
+    const connectionOptions = await new ConfigFactoryService().getConnectionOptions();
     Object.assign(connectionOptions, {
         synchronize: false,
         logging: true,
-        // entities: [
-        //     // "dist/src/secondary-adapters/dal/postgres/**/*.orm-entity{.ts,.js}",
-        //     // "src/secondary-adapters/dal/postgres/**/*.orm-entity{.ts,.js}",
-        // ],
-        entities: [join(__dirname, "**", "*.orm-entity.{ts,js}")],
-
-        migrations: ["dist/src/migrations/*.js"],
-        migrationsDir: "dist/src/migrations",
-        migrationsRun: true,
+        entities: [join(__dirname, "**", "*.orm-entity.{ts,js}"),],
+        migrations: ["dist/migrations/*.js",],
+        migrationsDir: "dist/migrations",
+        // migrationsRun: true,
     });
 
-    return await createConnection(connectionOptions);
+    connection = await createConnection(connectionOptions);
+
+    return connection;
 }

@@ -1,6 +1,6 @@
 export interface UserSignUpResponse {
     email: string;
-    entityId: string;
+    entity_id: string;
     login: string;
     access_token: string;
 }

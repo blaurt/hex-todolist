@@ -49,9 +49,6 @@ export class PinoLoggerService implements HttpLogger {
     }
 
     public info(msg: string, args: Record<string, unknown>) {
-        console.log("🚀 ~ file: pino-logger.service.ts ~ line 53 ~ PinoLoggerService ~ info ~ msg", msg);
-        console.log("this.getTraceId()", this.getTraceId());
-
         this.logger.info(msg, { traceId: this.getTraceId(), });
     }
 
